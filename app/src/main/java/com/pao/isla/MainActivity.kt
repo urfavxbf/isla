@@ -188,17 +188,11 @@ private fun IslaScreen(version: Int, grant: () -> Unit, start: () -> Unit, stop:
                         }
                         Switch(checked = c.showMedia, onCheckedChange = { update(c.copy(showMedia = it)) })
                     }
-                    Row(Modifier.fillMaxWidth(), verticalAlignment = Alignment.CenterVertically) {
-                        Column(Modifier.weight(1f)) {
-                            Text("Expand while playing", style = MaterialTheme.typography.bodyMedium)
-                            Text("Enlarge small camera-hole pill for song titles", color = Muted, style = MaterialTheme.typography.bodySmall)
-                        }
-                        Switch(
-                            checked = c.expandOnPlay,
-                            enabled = c.showMedia,
-                            onCheckedChange = { update(c.copy(expandOnPlay = it)) }
-                        )
-                    }
+                    Text(
+                        "When music plays, the island stays small. Tap the music note to open song details and playback controls; tap × to close.",
+                        color = Muted,
+                        style = MaterialTheme.typography.bodySmall
+                    )
                     Text(
                         "Android grants broad notification access for this feature. Isla only reads media-session metadata; it does not save or upload your notifications.",
                         color = Muted,
