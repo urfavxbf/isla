@@ -7,6 +7,10 @@
 
 package com.pao.isla.lab.ui.expanded
 
+import com.pao.isla.lab.R
+
+import androidx.compose.ui.res.stringResource
+
 import android.content.Context
 import androidx.compose.animation.core.Animatable
 import androidx.compose.animation.core.FastOutSlowInEasing
@@ -147,7 +151,7 @@ fun BatteryExpanded(
 
             Column {
                 IslaActivityEyebrow(
-                    label = "Power",
+                    label = stringResource(R.string.isla_card_power),
                     accent = batteryColor
                 )
                 Text(
