@@ -13,7 +13,7 @@ assert (ROOT / "LICENSE").is_file(), "GPL-3.0 LICENSE missing"
 assert (ROOT / "UPSTREAM_PROVENANCE.md").is_file(), "Upstream provenance missing"
 
 # These files intentionally retain the original project's identity and license.
-PROTECTED = {"LICENSE", "COPYING", "NOTICE", "UPSTREAM_PROVENANCE.md"}
+PROTECTED = {"LICENSE", "COPYING", "NOTICE", "UPSTREAM_PROVENANCE.md", "ISLA_ATTRIBUTION.md"}
 EXTENSIONS = {
     ".kt", ".kts", ".java", ".xml", ".md", ".txt", ".json", ".yaml",
     ".yml", ".toml", ".properties", ".gradle", ".pro", ".sh", ".html",
@@ -112,7 +112,8 @@ for item in all_paths:
     renamed += 1
 
 # Move package directories from com/agupta07505/isla to com/pao/isla/lab.
-for base in [ROOT / "app/src/main/java", ROOT / "app/src/test/java", ROOT / "app/src/androidTest/java"]:
+for base in [ROOT / "app/src/main/java", ROOT / "app/src/test/java", ROOT / "app/src/androidTest/java",
+             ROOT / "baselineprofile/src/main/java", ROOT / "baselineprofile/src/test/java", ROOT / "baselineprofile/src/androidTest/java"]:
     old = base / "com/agupta07505/isla"
     target = base / "com/pao/isla/lab"
     if old.exists():
