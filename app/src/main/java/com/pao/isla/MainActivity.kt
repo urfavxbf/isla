@@ -1,7 +1,11 @@
 package com.pao.isla
 
+import android.content.ComponentName
+import android.content.Context
 import android.content.Intent
 import android.net.Uri
+import android.os.Build
+import android.app.NotificationManager
 import android.os.Bundle
 import android.provider.Settings
 import androidx.activity.ComponentActivity
@@ -37,6 +41,12 @@ class MainActivity : ComponentActivity() {
         permissionVersion++
     }
 
+    override fun onResume() {
+        super.onResume()
+        // Re-check permissions after returning from Android Settings.
+        permissionVersion++
+    }
+
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         setContent {
@@ -58,6 +68,7 @@ private fun IslaScreen(version: Int, grant: () -> Unit, start: () -> Unit, stop:
     val context = androidx.compose.ui.platform.LocalContext.current
     var c by remember { mutableStateOf(IslandConfig.load(context)) }
     val permitted = remember(version) { Settings.canDrawOverlays(context) }
+    val musicAccess = remember(version) { hasMusicAccess(context) }
 
     fun update(next: IslandConfig) {
         c = next
@@ -148,6 +159,54 @@ private fun IslaScreen(version: Int, grant: () -> Unit, start: () -> Unit, stop:
                 }
             }
 
+
+            Card(colors = CardDefaults.cardColors(containerColor = Panel)) {
+                Column(Modifier.padding(18.dp), verticalArrangement = Arrangement.spacedBy(12.dp)) {
+                    Text("Now playing", style = MaterialTheme.typography.titleMedium, fontWeight = FontWeight.SemiBold)
+                    Text("Show live music titles and control playback from the floating island.", color = Muted)
+                    Text(
+                        if (musicAccess) "Music access enabled" else "Music access is off",
+                        color = if (musicAccess) Color(0xFF55D8A4) else Muted,
+                        style = MaterialTheme.typography.labelMedium
+                    )
+                    if (!musicAccess) {
+                        Button(
+                            onClick = { context.startActivity(Intent(Settings.ACTION_NOTIFICATION_LISTENER_SETTINGS)) },
+                            modifier = Modifier.fillMaxWidth()
+                        ) { Text("Enable music access") }
+                    } else {
+                        OutlinedButton(
+                            onClick = { context.startActivity(Intent(Settings.ACTION_NOTIFICATION_LISTENER_SETTINGS)) },
+                            modifier = Modifier.fillMaxWidth()
+                        ) { Text("Manage music access") }
+                    }
+                    HorizontalDivider()
+                    Row(Modifier.fillMaxWidth(), verticalAlignment = Alignment.CenterVertically) {
+                        Column(Modifier.weight(1f)) {
+                            Text("Show music on island", style = MaterialTheme.typography.bodyMedium)
+                            Text("Track name and playback controls", color = Muted, style = MaterialTheme.typography.bodySmall)
+                        }
+                        Switch(checked = c.showMedia, onCheckedChange = { update(c.copy(showMedia = it)) })
+                    }
+                    Row(Modifier.fillMaxWidth(), verticalAlignment = Alignment.CenterVertically) {
+                        Column(Modifier.weight(1f)) {
+                            Text("Expand while playing", style = MaterialTheme.typography.bodyMedium)
+                            Text("Enlarge small camera-hole pill for song titles", color = Muted, style = MaterialTheme.typography.bodySmall)
+                        }
+                        Switch(
+                            checked = c.expandOnPlay,
+                            enabled = c.showMedia,
+                            onCheckedChange = { update(c.copy(expandOnPlay = it)) }
+                        )
+                    }
+                    Text(
+                        "Android grants broad notification access for this feature. Isla only reads media-session metadata; it does not save or upload your notifications.",
+                        color = Muted,
+                        style = MaterialTheme.typography.bodySmall
+                    )
+                }
+            }
+
             Card(colors = CardDefaults.cardColors(containerColor = Panel)) {
                 Column(Modifier.padding(18.dp), verticalArrangement = Arrangement.spacedBy(12.dp)) {
                     Text("Floating island", style = MaterialTheme.typography.titleMedium, fontWeight = FontWeight.SemiBold)
@@ -160,7 +219,7 @@ private fun IslaScreen(version: Int, grant: () -> Unit, start: () -> Unit, stop:
                     OutlinedButton(onClick = { context.startActivity(Intent(Settings.ACTION_MANAGE_OVERLAY_PERMISSION, Uri.parse("package:${context.packageName}"))) }, modifier = Modifier.fillMaxWidth()) { Text("Open overlay settings") }
                 }
             }
-            Text("Android 8.0+. Media, calls and notification integrations can be added later using their required Android permissions.", color = Color(0xFF888696), style = MaterialTheme.typography.bodySmall)
+            Text("Android 8.0+. Calls and non-media notification integrations are not included yet.", color = Color(0xFF888696), style = MaterialTheme.typography.bodySmall)
         }
     }
 }
@@ -173,5 +232,18 @@ private fun SliderRow(title: String, label: String, value: Float, min: Float, ma
             Text(label, color = Accent, style = MaterialTheme.typography.labelMedium)
         }
         Slider(value = value, onValueChange = onChange, valueRange = min..max)
+    }
+}
+
+private fun hasMusicAccess(context: Context): Boolean {
+    val component = ComponentName(context, IslaMusicListener::class.java)
+    return if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.O_MR1) {
+        (context.getSystemService(Context.NOTIFICATION_SERVICE) as NotificationManager)
+            .isNotificationListenerAccessGranted(component)
+    } else {
+        Settings.Secure.getString(
+            context.contentResolver,
+            "enabled_notification_listeners"
+        )?.split(':')?.any { ComponentName.unflattenFromString(it) == component } == true
     }
 }
