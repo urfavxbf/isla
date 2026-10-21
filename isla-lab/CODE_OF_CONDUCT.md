@@ -1,6 +1,6 @@
 # Code Of Conduct
 
-Smart Island should be a useful, respectful, and welcoming open-source project.
+Isla should be a useful, respectful, and welcoming open-source project.
 
 ## Expected Behavior
 

@@ -1,10 +1,10 @@
-# Smart Island Product Roadmap
+# Isla Product Roadmap
 
 Last updated: October 18, 2026
 
 ## Product direction
 
-Smart Island should become the most reliable, privacy-first, and customizable glanceable activity overlay for Android. It makes important live information easier to act on without replacing the notification shade or collecting personal data.
+Isla should become the most reliable, privacy-first, and customizable glanceable activity overlay for Android. It makes important live information easier to act on without replacing the notification shade or collecting personal data.
 
 The roadmap follows three core principles:
 
@@ -16,7 +16,7 @@ The roadmap follows three core principles:
 
 ## Current baseline (v7.5.0)
 
-Smart Island currently provides:
+Isla currently provides:
 
 - A Compose-based floating overlay on Android 8+ (API 26 through API 36)
 - **Idle Widgets**: Cutout rotates through Live Clock, Date, Weather, Wind, Battery, Next Alarm, Net Speed, unread Notifications and Do Not Disturb / Modes widgets, with an hourly tick, Day Moments glyphs, smooth or LED tick styles, work / night / charging schedules, drag-to-reorder and pin-first
@@ -139,7 +139,7 @@ Released August 29, 2026.
 - **Ultra-Fluid Spring Animation Engine**: Synchronized width and height morphing to high-fluidity spring curves (`stiffness = 520f`, `dampingRatio = 0.72f`), reduced cross-fade durations to 190ms, and tuned window collapse cleanup to 220ms.
 - **Tap Anywhere on Expanded Cards to Open App**: Direct application launch from background/text/artwork on all expanded cards with ongoing music state preservation.
 - **Auto-Hide Pill Inactivity Timer with Tap-to-Reveal**: Customizable timeout (1s to 60s) with 1-tap presets and invisible touch target to awaken the pill on tap.
-- **Landscape Mode Visibility Toggle**: Option to keep Smart Island active and dynamically repositioned during device rotation.
+- **Landscape Mode Visibility Toggle**: Option to keep Isla active and dynamically repositioned during device rotation.
 - **Animation Flicker & Cutout Artifact Fixes**: Eliminated height jumps, window clipping, redundant updateLayout churn, and cutout double alpha blending.
 - **Complete Chinese & Portuguese Localization**: 100% translation parity across all new settings and dialogs.
 
@@ -227,7 +227,7 @@ Released July 27, 2026.
   - Preset window sizes (Quarter screen, Half screen, Pip) when triggering Swipe Down gesture.
   - Smooth animation morphing from expanded island card directly into Android Freeform window.
 - **Plugin Extension Architecture**:
-  - Expose a secure, local IPC API for third-party Android apps to feed live activity status into Smart Island.
+  - Expose a secure, local IPC API for third-party Android apps to feed live activity status into Isla.
 - **Local Cross-Device Status Sync**:
   - Peer-to-peer sync over Bluetooth Low Energy (BLE) or local Wi-Fi to view tablet or secondary phone battery, call, or media status on your primary device.
   - Strictly zero cloud servers or remote accounts required.

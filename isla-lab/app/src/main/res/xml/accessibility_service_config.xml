@@ -13,4 +13,4 @@
     android:canRetrieveWindowContent="true"
     android:description="@string/accessibility_service_description"
     android:showOnLockScreen="true"
-    android:settingsActivity="com.agupta07505.smartisland.MainActivity" />
+    android:settingsActivity="com.pao.isla.lab.MainActivity" />

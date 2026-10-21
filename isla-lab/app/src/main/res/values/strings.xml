@@ -12,7 +12,7 @@
     <string name="accessibility_service_label">Isla Lab Service</string>
     <string name="accessibility_service_description">Enables the Isla Lab overlay to sit on top of the status bar so you can tap the pill around your camera cutout without touch interference.</string>
     <string name="grant_accessibility">Grant Accessibility permission to start overlay over status bar</string>
-    <string name="made_by">Isla Lab · Based on Smart Island by Animesh Gupta</string>
+    <string name="made_by">Isla · Based on Smart Island by Animesh Gupta (GPL-3.0)</string>
     <string name="tab_studio">Home</string>
     <string name="tab_position">Layout</string>
     <string name="tab_settings">Settings</string>
@@ -27,7 +27,7 @@
     <string name="status_setup_needed">Setup Needed</string>
     <string name="status_action_required">Action Required</string>
     <string name="btn_grant_required_permissions">Grant Permissions</string>
-    <string name="enable_smart_island">Enable Isla Lab</string>
+    <string name="enable_isla">Enable Isla Lab</string>
     <string name="overlay_ready">Overlay service is ready</string>
     <string name="grant_overlay">Grant overlay permission to start</string>
     <string name="simulation_lab_title">Try It Out</string>
@@ -688,8 +688,8 @@
     <string name="card_about_subtitle">Version, the original project and licences</string>
     <string name="detail_title_about">About</string>
     <string name="about_version">Version %1$s</string>
-    <string name="about_based_on_title">Based on SmartIsland 7.0.0</string>
-    <string name="about_based_on_body">This app is based on SmartIsland 7.0.0 by Animesh Gupta. The original project is open source; this version changes its animations, layout, settings and features.</string>
+    <string name="about_based_on_title">Based on Isla 7.0.0</string>
+    <string name="about_based_on_body">This app is based on Isla 7.0.0 by Animesh Gupta. The original project is open source; this version changes its animations, layout, settings and features.</string>
     <string name="about_open_original">Open the original project</string>
     <string name="about_no_browser">No app found to open the link.</string>
     <string name="about_license_title">Licence</string>

@@ -1,6 +1,6 @@
-# Smart Island - Codebase & Architecture Analysis
+# Isla - Codebase & Architecture Analysis
 
-This document presents a comprehensive, technical deep-dive into the architecture, design, and implementation of the **Smart Island** Android application (reflecting the **v7.0.0** baseline).
+This document presents a comprehensive, technical deep-dive into the architecture, design, and implementation of the **Isla** Android application (reflecting the **v7.0.0** baseline).
 
 ---
 
@@ -13,24 +13,24 @@ The application is structured around a reactive, unidirectional data flow (UDF) 
 ```mermaid
 graph TD
     %% Events
-    AS[Android System] -->|System Notifications| NIL[SmartIslandNotificationListenerService]
+    AS[Android System] -->|System Notifications| NIL[IslaNotificationListenerService]
     AS -->|Power, Battery, BT Broadcasts| SER[SystemEventReceiver]
 
     %% Repositories and Data State
-    NIL -->|Parse, Filter & Forward| NR[SmartIslandNotificationRepository]
+    NIL -->|Parse, Filter & Forward| NR[IslaNotificationRepository]
     NIL -->|Parse Timers & Stopwatches| TSP[TimerStopwatchParser]
     NIL -->|Persist Notification Alerts| NHR[NotificationHistoryRepository / SQLite DB]
     TSP --> NR
     SER -->|Forward Charging / Battery State| NR
     
     %% Settings
-    MA[MainActivity / Settings UI] -->|Update Sliders, Inactivity, PillGestures & Toggles| SR[SmartIslandSettingsRepository]
+    MA[MainActivity / Settings UI] -->|Update Sliders, Inactivity, PillGestures & Toggles| SR[IslaSettingsRepository]
     GH[GitHub Releases API] -->|User Opt-In Checks| AU[AppUpdatesSection / GitHubApiService]
     
     %% UI State & Rendering
     SR -->|Flow Settings Updates| VM[IslandViewModel]
     NR -->|Flow Active Notifications| VM
-    VM -->|Compose State| OS[SmartIslandOverlayService]
+    VM -->|Compose State| OS[IslaOverlayService]
     
     %% Overlay UI
     OS -->|Draws overlay ComposeView| OV[IslandOverlayView / IslandExpandedContent]
@@ -48,15 +48,15 @@ graph TD
 ## 2. Core Service Components & Key Mechanisms
 
 ### 2.1. Notification Listener & Classification
-* **Class:** [SmartIslandNotificationListenerService](file:///a:/SmartIsland/app/src/main/java/com/agupta07505/smartisland/service/SmartIslandNotificationListenerService.kt)
+* **Class:** [IslaNotificationListenerService](file:///a:/Isla/app/src/main/java/com/pao/isla/lab/service/IslaNotificationListenerService.kt)
 * **Mechanism:**
   * **System Interception:** Intercepts incoming notifications by extending Android's `NotificationListenerService`.
-  * **System Tray Suppression:** If an incoming notification is classified as `IMPORTANCE_HIGH` (Heads-Up notification), the service calls `cancelNotification(sbn.key)` to suppress the default OS banner. Simultaneously, it posts the notification to the Smart Island overlay with `autoExpand = true` to mimic a heads-up animation.
+  * **System Tray Suppression:** If an incoming notification is classified as `IMPORTANCE_HIGH` (Heads-Up notification), the service calls `cancelNotification(sbn.key)` to suppress the default OS banner. Simultaneously, it posts the notification to the Isla overlay with `autoExpand = true` to mimic a heads-up animation.
   * **Suppressed Keys Set:** Maintains a local `suppressedKeys` set to handle the cancellation sync so that notifications are not accidentally removed from the overlay state during the self-cancellation process.
   * **Clock Parsing (`TimerStopwatchParser`):** Automatically decodes clock alerts (Google Clock, Samsung Clock, Xiaomi/HyperOS, ColorOS, Huawei) into dedicated `IslandMode.Timer` or `IslandMode.Stopwatch` states.
   * **Intelligent Notification Cooldown & Anti-Spam (`NotificationCooldownManager`):** Monitors notification bursts using a 30-second sliding window. Throttles apps exceeding the spam threshold, buffers the latest alert, and releases it cleanly after the quiet cooldown period.
-  * **Persistent SQLite Notification Storage:** Stores notification alerts into the local SQLite database via [NotificationHistoryRepository](file:///a:/SmartIsland/app/src/main/java/com/agupta07505/smartisland/data/NotificationHistoryRepository.kt) for in-app history search, category filtering, and audit.
-  * **Classification Logic:** Uses [NotificationFilter](file:///a:/SmartIsland/app/src/main/java/com/agupta07505/smartisland/util/NotificationFilter.kt) to filter out system-level package alerts, empty notifications, message sync background polling, and ongoing foreground tasks (unless they represent calls, music playback, progress tasks, or active timers). Categorizes notifications into one of the 13 `IslandMode` categories:
+  * **Persistent SQLite Notification Storage:** Stores notification alerts into the local SQLite database via [NotificationHistoryRepository](file:///a:/Isla/app/src/main/java/com/pao/isla/lab/data/NotificationHistoryRepository.kt) for in-app history search, category filtering, and audit.
+  * **Classification Logic:** Uses [NotificationFilter](file:///a:/Isla/app/src/main/java/com/pao/isla/lab/util/NotificationFilter.kt) to filter out system-level package alerts, empty notifications, message sync background polling, and ongoing foreground tasks (unless they represent calls, music playback, progress tasks, or active timers). Categorizes notifications into one of the 13 `IslandMode` categories:
     * `Notification.CallStyle` / `Notification.CATEGORY_CALL` $\rightarrow$ `IslandMode.IncomingCall`
     * `Notification.CATEGORY_TRANSPORT` or notifications with media controllers/action labels $\rightarrow$ `IslandMode.Music`
     * Active timers & countdowns $\rightarrow$ `IslandMode.Timer`
@@ -69,12 +69,12 @@ graph TD
   * **Media Session Binding:** Inspects the notification extras for `Notification.EXTRA_MEDIA_SESSION`. If found, it establishes a `MediaController` connection to track play/pause states, position estimation, and metadata (title, artist, album artwork).
 
 ### 2.2. Compose Overlay Lifecycle & IME Focus Management
-* **Class:** [SmartIslandOverlayService](file:///a:/SmartIsland/app/src/main/java/com/agupta07505/smartisland/service/SmartIslandOverlayService.kt)
+* **Class:** [IslaOverlayService](file:///a:/Isla/app/src/main/java/com/pao/isla/lab/service/IslaOverlayService.kt)
 * **Mechanism:**
   * **Application Overlay Window:** Inflates and manages a custom `ComposeView` drawn on the window manager using the `TYPE_APPLICATION_OVERLAY` flag.
   * **Dynamic Soft-Keyboard Focus Switching:** Dynamically flips WindowManager flags between `FLAG_NOT_FOCUSABLE` (for standard touch pass-through to background apps) and `FLAG_ALT_FOCUSABLE_IM` (to accept direct keyboard input during **Inline Reply** without locking up the OS).
   * **Landscape Mode Handling:** Dynamically adapts overlay positioning during screen rotation or auto-hides based on `showInLandscape` setting.
-  * **Overlay View Tree Owners:** Attaches custom Lifecycle, ViewModel, and SavedStateRegistry owners defined in [OverlayViewTreeOwners](file:///a:/SmartIsland/app/src/main/java/com/agupta07505/smartisland/service/OverlayViewTreeOwners.kt) directly to the window-hosted `ComposeView`. This enables Jetpack Compose components and animations to run safely within the Service context without throwing standard runtime Activity missing context exceptions.
+  * **Overlay View Tree Owners:** Attaches custom Lifecycle, ViewModel, and SavedStateRegistry owners defined in [OverlayViewTreeOwners](file:///a:/Isla/app/src/main/java/com/pao/isla/lab/service/OverlayViewTreeOwners.kt) directly to the window-hosted `ComposeView`. This enables Jetpack Compose components and animations to run safely within the Service context without throwing standard runtime Activity missing context exceptions.
 
 ### 2.3. Touch Pass-Through & Reflection Workaround
 The overlay window must not block touch events directed at underlying background apps (e.g. scrolling in Chrome, typing on a keyboard) when the island is collapsed.
@@ -104,8 +104,8 @@ Swiping down on an expanded notification opens its origin app in a floating wind
 
 State is persisted and exposed reactively using a repository pattern:
 
-* **[SmartIslandSettingsRepository](file:///a:/SmartIsland/app/src/main/java/com/agupta07505/smartisland/data/SmartIslandSettingsRepository.kt):** Uses Android Jetpack `DataStore` (Preferences) to persist user configurations (X/Y offsets, sizes, colors, enabled status, auto-hide duration, landscape visibility). Exposes a reactive `Flow<SmartIslandSettings>`, with atomic single-transaction `restoreSettings(settings)` and `resetAllSettings()` support for JSON backup/restore via Android SAF.
-* **[SmartIslandNotificationRepository](file:///a:/SmartIsland/app/src/main/java/com/agupta07505/smartisland/data/SmartIslandNotificationRepository.kt):** Holds active notifications in a thread-safe `MutableStateFlow<List<IslandNotification>>`. It receives posting/removal commands from services, synchronizing state with the UI.
+* **[IslaSettingsRepository](file:///a:/Isla/app/src/main/java/com/pao/isla/lab/data/IslaSettingsRepository.kt):** Uses Android Jetpack `DataStore` (Preferences) to persist user configurations (X/Y offsets, sizes, colors, enabled status, auto-hide duration, landscape visibility). Exposes a reactive `Flow<IslaSettings>`, with atomic single-transaction `restoreSettings(settings)` and `resetAllSettings()` support for JSON backup/restore via Android SAF.
+* **[IslaNotificationRepository](file:///a:/Isla/app/src/main/java/com/pao/isla/lab/data/IslaNotificationRepository.kt):** Holds active notifications in a thread-safe `MutableStateFlow<List<IslandNotification>>`. It receives posting/removal commands from services, synchronizing state with the UI.
 
 ---
 
@@ -114,11 +114,11 @@ State is persisted and exposed reactively using a repository pattern:
 The UI is built with custom-themed Jetpack Compose components. It implements high-fidelity spring animations and custom graphics rendering:
 
 ### 4.1. Gestural Interactions & Animation Flow
-The [IslandOverlayView](file:///a:/SmartIsland/app/src/main/java/com/agupta07505/smartisland/ui/IslandOverlayView.kt) implements dual-tier touch interceptors:
+The [IslandOverlayView](file:///a:/Isla/app/src/main/java/com/pao/isla/lab/ui/IslandOverlayView.kt) implements dual-tier touch interceptors:
 * **Collapsed Pill Gestures:**
   * **Swipe Left / Right:** Cycles through active notifications or triggers media track skips (`skipToNext`/`skipToPrevious`) without expanding.
   * **Swipe Up / Down:** Configurable to dismiss notification, expand island, or open notification shade.
-  * **Tap:** Expands into the full interactive Smart Island card (or awakens pill when idle-hidden).
+  * **Tap:** Expands into the full interactive Isla card (or awakens pill when idle-hidden).
   * **Master Toggle:** `enablePillSwipeActions` can disable pill gestures completely to keep the pill tap-only.
 * **Expanded Card Gestures:**
   * **Tap Neutral Expanded Background:** Opens the target application directly and collapses the card.
@@ -130,7 +130,7 @@ The [IslandOverlayView](file:///a:/SmartIsland/app/src/main/java/com/agupta07505
 * **Stack Indicator:** When more than 1 notification is active, the collapsed island draws concentric black arcs (`drawArc`) behind the left and right sides of the pill, visually indicating a stack of items.
 
 ### 4.2. Collapsed Visual Indicators
-The [IslandCollapsedContent](file:///a:/SmartIsland/app/src/main/java/com/agupta07505/smartisland/ui/IslandCollapsedContent.kt) contains slots tailored to the active mode:
+The [IslandCollapsedContent](file:///a:/Isla/app/src/main/java/com/pao/isla/lab/ui/IslandCollapsedContent.kt) contains slots tailored to the active mode:
 * **Left Slot:** Displays the app icon, caller contact picture, or media album art.
 * **Right Slot:** Contains dynamic indicators:
   * **Notification Mode:** A customizable blue notification dot.
@@ -140,28 +140,28 @@ The [IslandCollapsedContent](file:///a:/SmartIsland/app/src/main/java/com/agupta
   * **Battery Mode:** A custom battery percent text displaying next to the charging glyph.
 
 ### 4.3. Custom Graphics
-* **Dotted Battery Ring:** ([DottedRing](file:///a:/SmartIsland/app/src/main/java/com/agupta07505/smartisland/ui/components/DottedRing.kt)) A custom-drawn circular charging indicator. It uses infinite rotation and scale animations on the central bolt icon inside a custom dotted progress path.
-* **Wavy Seek Bar:** ([WavyMusicSeekBar](file:///a:/SmartIsland/app/src/main/java/com/agupta07505/smartisland/ui/WavyMusicSeekBar.kt)) A custom music progress bar displaying a sine wave pattern that animates dynamically when music is playing.
-* **Click Bounce:** ([BounceClick](file:///a:/SmartIsland/app/src/main/java/com/agupta07505/smartisland/ui/BounceClick.kt)) A custom modifier that scales buttons down to `0.90f` on press and rebounds with high-frequency tactile spring physics (`dampingRatio = MediumBouncy`, `stiffness = StiffnessMedium`).
+* **Dotted Battery Ring:** ([DottedRing](file:///a:/Isla/app/src/main/java/com/pao/isla/lab/ui/components/DottedRing.kt)) A custom-drawn circular charging indicator. It uses infinite rotation and scale animations on the central bolt icon inside a custom dotted progress path.
+* **Wavy Seek Bar:** ([WavyMusicSeekBar](file:///a:/Isla/app/src/main/java/com/pao/isla/lab/ui/WavyMusicSeekBar.kt)) A custom music progress bar displaying a sine wave pattern that animates dynamically when music is playing.
+* **Click Bounce:** ([BounceClick](file:///a:/Isla/app/src/main/java/com/pao/isla/lab/ui/BounceClick.kt)) A custom modifier that scales buttons down to `0.90f` on press and rebounds with high-frequency tactile spring physics (`dampingRatio = MediumBouncy`, `stiffness = StiffnessMedium`).
 
 ---
 
 ## 5. Settings Screen Layout
 
-The [SmartIslandHomeScreen](file:///a:/SmartIsland/app/src/main/java/com/agupta07505/smartisland/ui/SmartIslandHomeScreen.kt) is split into modular components adhering to the **Unified Deep Burnt-Orange (#D84315) Design System**:
+The [IslaHomeScreen](file:///a:/Isla/app/src/main/java/com/pao/isla/lab/ui/IslaHomeScreen.kt) is split into modular components adhering to the **Unified Deep Burnt-Orange (#D84315) Design System**:
 
-* **[HeaderSection](file:///a:/SmartIsland/app/src/main/java/com/agupta07505/smartisland/ui/sections/HeaderSection.kt):** Displays the app logo, tagline, and the master overlay switch.
-* **[PermissionsSection](file:///a:/SmartIsland/app/src/main/java/com/agupta07505/smartisland/ui/sections/PermissionsSection.kt):** Displays alert cards showing whether system overlay drawing, notification listener access, and system overlay warnings are enabled.
-* **[PositionsSection](file:///a:/SmartIsland/app/src/main/java/com/agupta07505/smartisland/ui/sections/PositionsSection.kt):** Contains sliders to live-update the pill's width, height, corner radius, X-offset, Y-offset, companion circle placement (Left vs Right), and iPhone Notch Mode docking.
-* **[NotificationsAndPrivacySection](file:///a:/SmartIsland/app/src/main/java/com/agupta07505/smartisland/ui/sections/NotificationsAndPrivacySection.kt):** Houses OEM device rules, anti-spam notification cooldown, and the on-demand **Selective App Alerts & Sound Manager** modal.
-* **[CustomizationsSection](file:///a:/SmartIsland/app/src/main/java/com/agupta07505/smartisland/ui/sections/CustomizationsSection.kt):** Houses preset color palettes and a custom RGB color picker dialog for all 13 modes, opacity sliders, and custom shadow elevation.
-* **[AppShortcutsSection](file:///a:/SmartIsland/app/src/main/java/com/agupta07505/smartisland/ui/sections/AppShortcutsSection.kt):** Provides quick-launch shortcut config with enable/disable master control and up to 8 pinned/recent apps.
-* **[GesturesSection](file:///a:/SmartIsland/app/src/main/java/com/agupta07505/smartisland/ui/sections/GesturesSection.kt):** Implements dual settings cards for **Collapsed Pill Swipe Actions** and **Expanded Card Swipe Actions**, with interactive playground sandbox.
-* **[BackupRestoreSection](file:///a:/SmartIsland/app/src/main/java/com/agupta07505/smartisland/ui/sections/BackupRestoreSection.kt):** Scoped Storage JSON backup and restore via Android SAF with atomic single-transaction restore and factory reset.
-* **[AppUpdatesSection](file:///a:/SmartIsland/app/src/main/java/com/agupta07505/smartisland/ui/sections/AppUpdatesSection.kt):** Specialized hub featuring Total Downloads metric (15,648+), Current Version line (v7.0.0), 1-tap GitHub update checker, changelogs viewer, top contributors, and recent commits.
-* **[DeveloperOptionsSection](file:///a:/SmartIsland/app/src/main/java/com/agupta07505/smartisland/ui/sections/DeveloperOptionsSection.kt):** 7-tap unlocked hub with in-memory logcat ring buffer (3,000 entries) and SAF `.txt` export.
-* **[SupportSection](file:///a:/SmartIsland/app/src/main/java/com/agupta07505/smartisland/ui/sections/SupportSection.kt):** Deep links to GitHub for starring, bug reports, and enhancements.
-* **[AboutSection](file:///a:/SmartIsland/app/src/main/java/com/agupta07505/smartisland/ui/sections/AboutSection.kt):** Displays developer social links, version details, and privacy links.
+* **[HeaderSection](file:///a:/Isla/app/src/main/java/com/pao/isla/lab/ui/sections/HeaderSection.kt):** Displays the app logo, tagline, and the master overlay switch.
+* **[PermissionsSection](file:///a:/Isla/app/src/main/java/com/pao/isla/lab/ui/sections/PermissionsSection.kt):** Displays alert cards showing whether system overlay drawing, notification listener access, and system overlay warnings are enabled.
+* **[PositionsSection](file:///a:/Isla/app/src/main/java/com/pao/isla/lab/ui/sections/PositionsSection.kt):** Contains sliders to live-update the pill's width, height, corner radius, X-offset, Y-offset, companion circle placement (Left vs Right), and iPhone Notch Mode docking.
+* **[NotificationsAndPrivacySection](file:///a:/Isla/app/src/main/java/com/pao/isla/lab/ui/sections/NotificationsAndPrivacySection.kt):** Houses OEM device rules, anti-spam notification cooldown, and the on-demand **Selective App Alerts & Sound Manager** modal.
+* **[CustomizationsSection](file:///a:/Isla/app/src/main/java/com/pao/isla/lab/ui/sections/CustomizationsSection.kt):** Houses preset color palettes and a custom RGB color picker dialog for all 13 modes, opacity sliders, and custom shadow elevation.
+* **[AppShortcutsSection](file:///a:/Isla/app/src/main/java/com/pao/isla/lab/ui/sections/AppShortcutsSection.kt):** Provides quick-launch shortcut config with enable/disable master control and up to 8 pinned/recent apps.
+* **[GesturesSection](file:///a:/Isla/app/src/main/java/com/pao/isla/lab/ui/sections/GesturesSection.kt):** Implements dual settings cards for **Collapsed Pill Swipe Actions** and **Expanded Card Swipe Actions**, with interactive playground sandbox.
+* **[BackupRestoreSection](file:///a:/Isla/app/src/main/java/com/pao/isla/lab/ui/sections/BackupRestoreSection.kt):** Scoped Storage JSON backup and restore via Android SAF with atomic single-transaction restore and factory reset.
+* **[AppUpdatesSection](file:///a:/Isla/app/src/main/java/com/pao/isla/lab/ui/sections/AppUpdatesSection.kt):** Specialized hub featuring Total Downloads metric (15,648+), Current Version line (v7.0.0), 1-tap GitHub update checker, changelogs viewer, top contributors, and recent commits.
+* **[DeveloperOptionsSection](file:///a:/Isla/app/src/main/java/com/pao/isla/lab/ui/sections/DeveloperOptionsSection.kt):** 7-tap unlocked hub with in-memory logcat ring buffer (3,000 entries) and SAF `.txt` export.
+* **[SupportSection](file:///a:/Isla/app/src/main/java/com/pao/isla/lab/ui/sections/SupportSection.kt):** Deep links to GitHub for starring, bug reports, and enhancements.
+* **[AboutSection](file:///a:/Isla/app/src/main/java/com/pao/isla/lab/ui/sections/AboutSection.kt):** Displays developer social links, version details, and privacy links.
 
 ---
 
@@ -171,13 +171,13 @@ The repository maintains an extensive test suite verifying logic boundaries:
 
 | Test File | Target Area | What is Verified |
 | :--- | :--- | :--- |
-| [PillGestureActionTest](file:///a:/SmartIsland/app/src/test/java/com/agupta07505/smartisland/util/PillGestureActionTest.kt) | In-Pill Gestures | Directional swipe actions, media skip routing, notification cycling, and disable states. |
-| [SmartIslandNotificationRepositoryTest](file:///a:/SmartIsland/app/src/test/java/com/agupta07505/smartisland/data/SmartIslandNotificationRepositoryTest.kt) | Notification Repository | Event streams, posting, removing, timer resets, commands. |
-| [IslandModeMappingTest](file:///a:/SmartIsland/app/src/test/java/com/agupta07505/smartisland/model/IslandModeMappingTest.kt) | Mode Classification | Correct mapping of categories (Call, Transport, Progress, Media buttons) to `IslandMode`. |
-| [NotificationPriorityTest](file:///a:/SmartIsland/app/src/test/java/com/agupta07505/smartisland/service/NotificationPriorityTest.kt) | Interception Filters | Ignored packages/flags, ongoing notification filter constraints, edge-case actions. |
-| [SmartIslandSettingsTest](file:///a:/SmartIsland/app/src/test/java/com/agupta07505/smartisland/data/SmartIslandSettingsTest.kt) | Settings Datastore | Preference serialization, JSON export/import round-trip, bounds clamping, corrupted JSON fallbacks, reset bounds. |
-| [SystemEventReceiverTest](file:///a:/SmartIsland/app/src/test/java/com/agupta07505/smartisland/service/SystemEventReceiverTest.kt) | Battery & Power Receiver | Intent matching, charging state parsing, battery percentage change thresholds. |
-| [IslandOverlaySmokeTest](file:///a:/SmartIsland/app/src/androidTest/java/com/agupta07505/smartisland/IslandOverlaySmokeTest.kt) | UI Compose Overlay | Smoke-testing Compose view creation, settings repository connection, overlay UI rendering. |
+| [PillGestureActionTest](file:///a:/Isla/app/src/test/java/com/pao/isla/lab/util/PillGestureActionTest.kt) | In-Pill Gestures | Directional swipe actions, media skip routing, notification cycling, and disable states. |
+| [IslaNotificationRepositoryTest](file:///a:/Isla/app/src/test/java/com/pao/isla/lab/data/IslaNotificationRepositoryTest.kt) | Notification Repository | Event streams, posting, removing, timer resets, commands. |
+| [IslandModeMappingTest](file:///a:/Isla/app/src/test/java/com/pao/isla/lab/model/IslandModeMappingTest.kt) | Mode Classification | Correct mapping of categories (Call, Transport, Progress, Media buttons) to `IslandMode`. |
+| [NotificationPriorityTest](file:///a:/Isla/app/src/test/java/com/pao/isla/lab/service/NotificationPriorityTest.kt) | Interception Filters | Ignored packages/flags, ongoing notification filter constraints, edge-case actions. |
+| [IslaSettingsTest](file:///a:/Isla/app/src/test/java/com/pao/isla/lab/data/IslaSettingsTest.kt) | Settings Datastore | Preference serialization, JSON export/import round-trip, bounds clamping, corrupted JSON fallbacks, reset bounds. |
+| [SystemEventReceiverTest](file:///a:/Isla/app/src/test/java/com/pao/isla/lab/service/SystemEventReceiverTest.kt) | Battery & Power Receiver | Intent matching, charging state parsing, battery percentage change thresholds. |
+| [IslandOverlaySmokeTest](file:///a:/Isla/app/src/androidTest/java/com/pao/isla/lab/IslandOverlaySmokeTest.kt) | UI Compose Overlay | Smoke-testing Compose view creation, settings repository connection, overlay UI rendering. |
 
 ---
 

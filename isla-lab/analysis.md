@@ -1,12 +1,12 @@
-# Smart Island: Technical Analysis
+# Isla: Technical Analysis
 
-Reference for how the app is built, as of the dev branch (the 7.5.0 work). Source paths are relative to `app/src/main/java/com/agupta07505/smartisland/` unless stated.
+Reference for how the app is built, as of the dev branch (the 7.5.0 work). Source paths are relative to `app/src/main/java/com/pao/isla/lab/` unless stated.
 
 ---
 
 ## 1. Overview
 
-Smart Island is an Android app that draws a pill around the camera cutout and fills it with notifications, media, calls, timers, system events and idle widgets. It reads the notification shade through a notification listener, draws through an accessibility overlay, and renders everything with Jetpack Compose.
+Isla is an Android app that draws a pill around the camera cutout and fills it with notifications, media, calls, timers, system events and idle widgets. It reads the notification shade through a notification listener, draws through an accessibility overlay, and renders everything with Jetpack Compose.
 
 | | |
 | :--- | :--- |
@@ -56,11 +56,11 @@ Supporting files: `docs/` (release signing, Telegram setup), `scripts/` (keystor
 
 | Component | Type | Role |
 | :--- | :--- | :--- |
-| `SmartIslandApp` | `Application` (Hilt) | Restores the log, installs the crash logger, applies hidden API exemptions |
+| `IslaApp` | `Application` (Hilt) | Restores the log, installs the crash logger, applies hidden API exemptions |
 | `MainActivity` | Activity | Settings app (Compose) |
 | `ui/pickers/PickerActivity` | Activity | See-through window for the app and utility pickers, so choosing never opens the app |
-| `SmartIslandOverlayService` | `AccessibilityService` and foreground service (special use) | Owns the overlay window, the ViewModel and the event sources |
-| `SmartIslandNotificationListenerService` | `NotificationListenerService` | Reads, filters and classifies notifications |
+| `IslaOverlayService` | `AccessibilityService` and foreground service (special use) | Owns the overlay window, the ViewModel and the event sources |
+| `IslaNotificationListenerService` | `NotificationListenerService` | Reads, filters and classifies notifications |
 | `AutostartReceiver` | Receiver | Restarts on boot, package replace and user present |
 | `TimerActionReceiver`, `StopwatchActionReceiver` | Receivers | Timer and stopwatch buttons from the island |
 | `ShizukuProvider` | Provider | Shizuku binder entry |
@@ -97,7 +97,7 @@ Everything flows one way: sources write cards to the repository, the ViewModel c
 
 ## 5. Services
 
-### 5.1 `SmartIslandOverlayService`
+### 5.1 `IslaOverlayService`
 
 - **Window:** adds a `ComposeView` with `TYPE_ACCESSIBILITY_OVERLAY` and supplies its own lifecycle, ViewModel and saved-state owners (`service/OverlayViewTreeOwners.kt`) because it runs outside an Activity.
 - **Touch pass-through:** a reflected insets listener limits touches to the pill when collapsed and to the full frame when expanded. Hidden API exemptions make this work across ROMs.
@@ -107,7 +107,7 @@ Everything flows one way: sources write cards to the repository, the ViewModel c
 - **Launches:** floating windows (Android freeform or LMO Freeform), the notification shade and the pinned apps and utilities.
 - **Recovery:** `SystemServiceRecovery` reconnects the listener and accessibility service after a force stop.
 
-### 5.2 `SmartIslandNotificationListenerService`
+### 5.2 `IslaNotificationListenerService`
 
 - Applies `NotificationFilter` (sync polls, wearable chatter, group summaries, torch), then classifies each notification into an `IslandMode`.
 - Uses specialised parsers: `TimerStopwatchParser`, `NavigationParser`, `LiveActivityParser`, `TransferDetector` and `TransferClassifier`, `HotspotUtil`, `VoipCallDetector`.
@@ -133,8 +133,8 @@ Everything flows one way: sources write cards to the repository, the ViewModel c
 
 ## 6. State & Persistence
 
-- **Settings:** `SmartIslandSettings` (200+ fields) stored through `SmartIslandSettingsRepository` in DataStore, exposed as a `Flow`. `OrientationProfile` separates portrait and landscape values.
-- **Notifications:** `SmartIslandNotificationRepository` holds the live cards. It is injected through Hilt (`di/AppModule.kt`) and reached from services through an entry point (`di/SmartIslandRepositories.kt`).
+- **Settings:** `IslaSettings` (200+ fields) stored through `IslaSettingsRepository` in DataStore, exposed as a `Flow`. `OrientationProfile` separates portrait and landscape values.
+- **Notifications:** `IslaNotificationRepository` holds the live cards. It is injected through Hilt (`di/AppModule.kt`) and reached from services through an entry point (`di/IslaRepositories.kt`).
 - **History:** `NotificationHistoryDbHelper` (SQLite, one table with time and package indexes) behind `NotificationHistoryRepository`.
 - **Other stores:** daily network usage (`NetUsageStore`) and custom fonts copied to `files/fonts`. Pinned apps and the utilities layout are saved inside the settings.
 - **Backup and restore:** JSON through the Storage Access Framework with bounds validation and a single atomic restore. Custom fonts and the weather API key are never included.
@@ -168,7 +168,7 @@ One composable per mode: notification (inline reply, reader, picture selector), 
 
 ### 7.4 Settings app
 
-`SmartIslandHomeScreen` has four tabs (Studio, Position, Demo, Settings) and detail pages for notification rules, shortcuts, history, colours, gestures, permissions, backup, diagnostics, timing, idle widgets (weather, net speed, calendar), face ID, updates, support, about and developer options. `ui/search/` indexes every setting for in-app search, and `DemoSection` and `LandscapeLabSection` replay sample events.
+`IslaHomeScreen` has four tabs (Studio, Position, Demo, Settings) and detail pages for notification rules, shortcuts, history, colours, gestures, permissions, backup, diagnostics, timing, idle widgets (weather, net speed, calendar), face ID, updates, support, about and developer options. `ui/search/` indexes every setting for in-app search, and `DemoSection` and `LandscapeLabSection` replay sample events.
 
 ---
 

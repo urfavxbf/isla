@@ -21,7 +21,7 @@
     <string name="status_setup_needed">必要なセットアップ</string>
     <string name="status_action_required">アクション 必須</string>
     <string name="btn_grant_required_permissions">助成金の許可</string>
-    <string name="enable_smart_island">スマートアイランドを有効にする</string>
+    <string name="enable_isla">スマートアイランドを有効にする</string>
     <string name="overlay_ready">オーバーレイサービスは準備ができています</string>
     <string name="grant_overlay">オーバーレイ権限を付与する</string>
     <string name="simulation_lab_title">試してみる</string>
@@ -682,8 +682,8 @@
     <string name="card_about_subtitle">バージョン、元のプロジェクトとライセンス</string>
     <string name="detail_title_about">お問い合わせ</string>
     <string name="about_version">バージョン%1$s</string>
-    <string name="about_based_on_title">SmartIsland 7.0.0 に基づく</string>
-    <string name="about_based_on_body">このアプリは、Animesh Gupta によって SmartIsland 7.0.0 に基づいています。 元のプロジェクトはオープンソースです。このバージョンはアニメーション、レイアウト、設定、機能を変更します.</string>
+    <string name="about_based_on_title">Isla 7.0.0 に基づく</string>
+    <string name="about_based_on_body">このアプリは、Animesh Gupta によって Isla 7.0.0 に基づいています。 元のプロジェクトはオープンソースです。このバージョンはアニメーション、レイアウト、設定、機能を変更します.</string>
     <string name="about_open_original">オリジナルプロジェクトを開く</string>
     <string name="about_no_browser">リンクを開くためのアプリはありません.</string>
     <string name="about_license_title">ライセンス</string>

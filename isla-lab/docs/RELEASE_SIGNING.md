@@ -19,13 +19,13 @@ They are ignored by `.gitignore`.
 From the project root on Windows:
 
 ```powershell
-.\scripts\export-keystore-base64.ps1 -KeystorePath .\smartIsland.jks
+.\scripts\export-keystore-base64.ps1 -KeystorePath .\isla.jks
 ```
 
 This creates:
 
 ```text
-smartIsland_base64.txt
+isla_base64.txt
 ```
 
 Open that file locally and copy the full single-line content into a GitHub repository secret named:
@@ -34,7 +34,7 @@ Open that file locally and copy the full single-line content into a GitHub repos
 ANDROID_KEYSTORE_BASE64
 ```
 
-Do not commit `smartIsland_base64.txt`.
+Do not commit `isla_base64.txt`.
 
 ## 3. Add GitHub Repository Secrets
 
@@ -48,10 +48,10 @@ Add these secrets:
 
 | Secret name | Value |
 | --- | --- |
-| `ANDROID_KEYSTORE_BASE64` | Full content of `smartIsland_base64.txt` |
+| `ANDROID_KEYSTORE_BASE64` | Full content of `isla_base64.txt` |
 | `ANDROID_KEYSTORE_PASSWORD` | Keystore/store password |
 
-The workflow detects the key alias from `smartIsland.jks` automatically and uses `ANDROID_KEYSTORE_PASSWORD` as the key password.
+The workflow detects the key alias from `isla.jks` automatically and uses `ANDROID_KEYSTORE_PASSWORD` as the key password.
 
 ## 4. Build A Release
 
@@ -76,7 +76,7 @@ When a tag starting with `v` is pushed, the workflow builds signed artifacts and
 `RUNNER_TEMP` is a GitHub Actions temporary folder path that exists only during a workflow run. The workflow decodes your `ANDROID_KEYSTORE_BASE64` secret into:
 
 ```text
-$RUNNER_TEMP/smartIsland.jks
+$RUNNER_TEMP/isla.jks
 ```
 
 That file is created inside GitHub's temporary runner environment, used for signing, and then discarded after the job finishes. It does not need to exist in your repository.
@@ -86,7 +86,7 @@ That file is created inside GitHub's temporary runner environment, used for sign
 The workflow uploads one signed release APK:
 
 ```text
-SmartIsland-v3.0.apk
+Isla-v3.0.apk
 ```
 
 The version part comes from `versionName` in `app/build.gradle.kts`.

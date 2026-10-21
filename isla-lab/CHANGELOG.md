@@ -1,6 +1,6 @@
 # Changelog
 
-All notable changes to Smart Island should be documented in this file.
+All notable changes to Isla should be documented in this file.
 
 The format is inspired by Keep a Changelog, and this project uses the GNU General Public License v3.0.
 
@@ -16,7 +16,7 @@ The format is inspired by Keep a Changelog, and this project uses the GNU Genera
 
 ### Major Release Highlights (v7.5.0)
 
-Smart Island **v7.5.0** adds idle widgets and a full landscape mode, and reworks large parts of the card, gesture and theme system:
+Isla **v7.5.0** adds idle widgets and a full landscape mode, and reworks large parts of the card, gesture and theme system:
 - **Idle Widgets**: the cutout now rotates through live widgets (clock, date, weather, wind, battery, next alarm, net speed, unread count, Do Not Disturb) when no event is on the island.
 - **Weather, Net Speed & Calendar**: location-aware weather with a custom provider option, a net speed widget with daily usage, and the next calendar event on the date widget.
 - **Face Unlock Animation**: a face scan and fingerprint animation drawn over the cutout when the phone is unlocked.
@@ -90,7 +90,7 @@ Smart Island **v7.5.0** adds idle widgets and a full landscape mode, and reworks
 
 ### Major Release Highlights (v7.0.0)
 
-Smart Island **v7.0.0** is a landmark major release delivering comprehensive improvements across gesture controls, layout customization, device safety, app updates, and design aesthetics:
+Isla **v7.0.0** is a landmark major release delivering comprehensive improvements across gesture controls, layout customization, device safety, app updates, and design aesthetics:
 - **In-Pill Swipe Gestures & Media Controls**: Compact collapsed pill now supports independent left/right/up/down gestures, enabling next/prev song skipping or notification cycling directly on the pill without expanding.
 - **Dedicated App Updates & Downloads Hub**: New dedicated settings section with live Total Downloads statistics (15,648+), in-app GitHub update checker, version insights, top community contributors, and recent commits feed.
 - **Selective App Alerts & Sound Manager**: Redesigned lightweight app alert manager modal that prevents UI stutter by selectively loading apps on-demand, allowing granular notification, sound, and exclusion controls.
@@ -103,7 +103,7 @@ Smart Island **v7.0.0** is a landmark major release delivering comprehensive imp
 
 ### Added
 
-- **In-Pill Swipe Gestures & Media Control Engine (`IslandOverlayView.kt`, `GesturesSection.kt`, `SmartIslandSettings.kt`, `SmartIslandSettingsRepository.kt`, `SwipeAction.kt`, `ExpandedActions.kt`)**:
+- **In-Pill Swipe Gestures & Media Control Engine (`IslandOverlayView.kt`, `GesturesSection.kt`, `IslaSettings.kt`, `IslaSettingsRepository.kt`, `SwipeAction.kt`, `ExpandedActions.kt`)**:
   - **Independent Pill Gesture Master Switch**: Toggle `enablePillSwipeActions` enables or disables swipe gestures on the compact collapsed pill independently from expanded card gestures, preventing accidental swipes while keeping tap-to-expand intact.
   - **Horizontal Swipe Notification Cycling**: Swiping left or right across the collapsed pill cycles through active notifications in the stack.
   - **Direct In-Pill Media Track Skip**: Configurable option to map Swipe Left / Swipe Right on the collapsed pill directly to `skipToPrevious` and `skipToNext` for music players (Spotify, YouTube Music, Apple Music, podcasts, system players) without expanding the card.
@@ -115,7 +115,7 @@ Smart Island **v7.0.0** is a landmark major release delivering comprehensive imp
   - **Individual Gesture Disabling**: Any swipe direction on either the pill or expanded card can be set to **"Disabled"** (`SwipeAction.None`).
   - **Touch Event Resolution & Velocity Tracking**: Refined `pointerInput` and `detectDragGestures` in `IslandOverlayView.kt` ensuring small-amplitude swipes on compact notch dimensions register reliably without conflicting with click-to-expand.
 
-- **Dedicated App Updates & Downloads Hub (`AppUpdatesSection.kt`, `SmartIslandHomeScreen.kt`, `GitHubApiService.kt`)**:
+- **Dedicated App Updates & Downloads Hub (`AppUpdatesSection.kt`, `IslaHomeScreen.kt`, `GitHubApiService.kt`)**:
   - **Separation into Dedicated Hub**: Separated update checking, download metrics, and GitHub community insights from the About screen into its own clean section.
   - **Total Downloads Counter Banner**: Prominently displays live total downloads metric (15,648+ downloads) at the very top of the hub.
   - **Clean Horizontal Layout Hierarchy**:
@@ -132,44 +132,44 @@ Smart Island **v7.0.0** is a landmark major release delivering comprehensive imp
   - **Granular Per-App Controls**:
     - **Notification Toggle**: Enable or mute visual island alerts for the selected application.
     - **Alert Sound Toggle**: Selectively enable or disable custom chime audio for specific applications.
-    - **Exclude from Smart Island**: Completely exclude high-traffic or private apps from surfacing on the island.
+    - **Exclude from Isla**: Completely exclude high-traffic or private apps from surfacing on the island.
   - **Configured Apps Summary**: Displays list and count of explicitly customized applications with 1-tap removal.
 
-- **Unified Deep Burnt-Orange (`#D84315`) Design System (`Color.kt`, `Theme.kt`, `SmartIslandHomeScreen.kt`, all UI sections)**:
+- **Unified Deep Burnt-Orange (`#D84315`) Design System (`Color.kt`, `Theme.kt`, `IslaHomeScreen.kt`, all UI sections)**:
   - **Curated Palette**: Replaced cluttered rainbow colors with a high-contrast, visually pleasing burnt-orange palette (`#D84315`, `#BF360C`, `#FF7043`, `#FFAB91`) paired with deep dark surfaces (`#121212`, `#1E1E1E`).
   - **Harmonious Icon Tinting**: Unified tinted Material icons across all settings category cards, action badges, dialogs, and sliders, providing a cohesive, state-of-the-art visual experience.
   - **Refined Card Typography**: High-contrast white headers (`#FFFFFF`) with subtle slate secondary text (`#B0BEC5`) for effortless readability.
 
-- **Configurable Companion Circle Position (`PositionsSection.kt`, `IslandOverlayView.kt`, `SmartIslandOverlayService.kt`, `SmartIslandSettings.kt`, `SmartIslandSettingsRepository.kt`)**:
+- **Configurable Companion Circle Position (`PositionsSection.kt`, `IslandOverlayView.kt`, `IslaOverlayService.kt`, `IslaSettings.kt`, `IslaSettingsRepository.kt`)**:
   - **Left or Right Placement Option**: Added `circlePosition` setting (`"right"` vs `"left"`, default `"right"`) allowing users to position the multi-tasking companion circle on either the left or right side of the main pill.
   - **Optimized for Corner Displays**: Avoids edge crowding and collisions on devices with right-aligned punch-hole cameras (Galaxy S10, Huawei, Honor, etc.) by anchoring the companion circle on the left.
   - **Dedicated UI Card in Positions & Sizing**: Segmented selector with visual direction icons (`AlignHorizontalLeft` and `AlignHorizontalRight`).
   - **Symmetric Anti-Collapse Geometry Clamping**: Unified layout math ensuring the companion circle and pill maintain at least `compactGap` (8dp) separation across all screen widths and orientations.
 
-- **iPhone Notch Mode & Companion Circle Elimination (`PositionsSection.kt`, `IslandOverlayView.kt`, `SmartIslandOverlayService.kt`, `SmartIslandSettings.kt`)**:
+- **iPhone Notch Mode & Companion Circle Elimination (`PositionsSection.kt`, `IslandOverlayView.kt`, `IslaOverlayService.kt`, `IslaSettings.kt`)**:
   - **Authentic iPhone Notch Docking**: Anchors the island flush against the top display edge (`y = 0`), matching iPhone X through iPhone 14 hardware notches.
   - **Rounded Bottom Corners**: Seamless zero-radius top corners (`topStart = 0.dp, topEnd = 0.dp`) and curved bottom corners (`bottomStart = cornerRadius.dp, bottomEnd = cornerRadius.dp`).
   - **Companion Circle Elimination**: Suppresses split companion circle when two or more activities are active, keeping a unified notch footprint.
   - **Dedicated Card & Preset**: 1-tap **"Apply Recommended iPhone Notch Size"** (175x35dp, y = 0) in Positions & Sizing.
 
-- **Developer Mode & In-App Log Recording & Diagnostic Export (`DeveloperOptionsSection.kt`, `AppLogRecorder.kt`, `AboutSection.kt`, `SmartIslandSettings.kt`)**:
+- **Developer Mode & In-App Log Recording & Diagnostic Export (`DeveloperOptionsSection.kt`, `AppLogRecorder.kt`, `AboutSection.kt`, `IslaSettings.kt`)**:
   - **7-Tap Version Unlock**: Android easter-egg style unlock via 7 taps on App Version in About section.
   - **In-Memory Ring Buffer (`AppLogRecorder.kt`)**: Thread-safe buffer capturing up to 3,000 diagnostic events, service lifecycles, and exceptions.
   - **Real-Time Process Logcat Capture**: Extracts app process logcat trace (`logcat -d -v threadtime --pid=$pid`) without elevated permissions.
-  - **Scoped Storage SAF Export**: One-tap export saving diagnostic report (`smartisland_logs_<timestamp>.txt`) via Storage Access Framework.
+  - **Scoped Storage SAF Export**: One-tap export saving diagnostic report (`isla_logs_<timestamp>.txt`) via Storage Access Framework.
   - **1-Tap Share, Copy & Clear**: System share sheet (`ACTION_SEND`), clipboard copying, and live buffer clearing.
 
-- **Full Settings Backup & Restore System (`BackupRestoreSection.kt`, `SmartIslandSettings.kt`, `SmartIslandSettingsRepository.kt`)**:
+- **Full Settings Backup & Restore System (`BackupRestoreSection.kt`, `IslaSettings.kt`, `IslaSettingsRepository.kt`)**:
   - **Scoped Storage JSON Export (`CreateDocument`)**: Portable JSON export of geometry, dimensions, offsets, corner radii, opacity, shadow elevation, Color Studio palette, App Shortcuts, and Privacy rules.
   - **Scoped Storage JSON Import (`OpenDocument`)**: Validated configuration import with metadata inspection, dimension bounds clamping, and confirmation dialogs.
   - **Atomic Single-Transaction Restore**: Applies 40+ preferences atomically in DataStore without UI flicker.
   - **Factory Reset**: 1-tap reset to default settings with confirmation dialog.
 
-- **Bluetooth Device Battery & Earbuds Alternating Animation (`IslandCollapsedContent.kt`, `BluetoothExpanded.kt`, `SystemEventReceiver.kt`, `SmartIslandSettings.kt`)**:
+- **Bluetooth Device Battery & Earbuds Alternating Animation (`IslandCollapsedContent.kt`, `BluetoothExpanded.kt`, `SystemEventReceiver.kt`, `IslaSettings.kt`)**:
   - **Dual-Path Battery Level Extraction**: Broadcast extras (`BATTERY_LEVEL`) with graceful reflection fallback on `device.getBatteryLevel()`.
   - **Fluid Spring Transition**: 3-second cadence alternating between live battery gauge and earbuds icon using spring physics (`stiffness = 520f`, `dampingRatio = 0.72f`).
 
-- **Intelligent Notification Cooldown & Anti-Spam Engine (`NotificationCooldownManager.kt`, `SmartIslandNotificationListenerService.kt`, `NotificationsAndPrivacySection.kt`, `SmartIslandSettings.kt`)**:
+- **Intelligent Notification Cooldown & Anti-Spam Engine (`NotificationCooldownManager.kt`, `IslaNotificationListenerService.kt`, `NotificationsAndPrivacySection.kt`, `IslaSettings.kt`)**:
   - **Sliding Window Burst Detection**: 30-second window rate limiter (e.g. 3 alerts in 30s) cooling down noisy apps.
   - **Delayed Delivery**: Holds rapid successive spam while buffering the latest alert, surfacing it cleanly after the quiet interval.
   - **Per-App Whitelist Exclusion**: Whitelist critical messaging/emergency apps from being throttled.
@@ -181,9 +181,9 @@ Smart Island **v7.0.0** is a landmark major release delivering comprehensive imp
 
 - **In-Pill Swipe Gesture Event Interception (`IslandOverlayView.kt`)**:
   - Fixed gesture conflict where compact pill click listeners were preempting drag gestures, ensuring horizontal and vertical swipes trigger immediately and accurately.
-- **App Updates & Downloads Layout Alignment (`SmartIslandHomeScreen.kt`)**:
+- **App Updates & Downloads Layout Alignment (`IslaHomeScreen.kt`)**:
   - Fixed vertical stacking bug in Settings Overview; App Updates & Downloads now renders as a clean horizontal card aligned with Backup & Restore and About.
-- **Service Connect / Rebind Stale Notification Flooding (`SmartIslandNotificationListenerService.kt`, `NotificationFilter.kt`)**:
+- **Service Connect / Rebind Stale Notification Flooding (`IslaNotificationListenerService.kt`, `NotificationFilter.kt`)**:
   - On `onListenerConnected()`, only active ongoing notifications (Music, Calls, Timers, Stopwatches, Navigation, Live Activities, Downloads, Hotspot, Recording) are restored; stale standard notifications from the shade are prevented from dumping into the island.
   - Enforced a 1200ms debounce on alert sound playback and 1500ms debounce on auto-expansion during bursts.
   - Implemented per-package standard notification coalescing so older messages from the same chat app are replaced rather than creating dozens of pages.
@@ -194,7 +194,7 @@ Smart Island **v7.0.0** is a landmark major release delivering comprehensive imp
 - **Bluetooth Watch & Wearable Connection Spam Fix (`SystemEventReceiver.kt`, `NotificationFilter.kt`)**:
   - Filtered out smartwatches, fitness trackers, and BLE peripherals from triggering audio Bluetooth popups.
   - Added 30-second debounce per Bluetooth MAC address, preventing reconnect loops (e.g. Galaxy Watch on OneUI) from auto-expanding the island repeatedly.
-- **Do Not Disturb (DND) Compliance (`SmartIslandNotificationListenerService.kt`)**:
+- **Do Not Disturb (DND) Compliance (`IslaNotificationListenerService.kt`)**:
   - Automatically respects system DND suppression flags (`getSuppressionFilterFlags()`) and purges suppressed alerts during Priority, Alarms-only, or Total Silence modes.
 - **Nubia / RedMagic Hardware Optimization (`OemDeviceRules.kt`)**:
   - Added dedicated under-display camera and punch-hole layout rules for Nubia and RedMagic devices.
@@ -206,26 +206,26 @@ Smart Island **v7.0.0** is a landmark major release delivering comprehensive imp
 
 ### Added
 
-- **Ultra-Fluid, High-Speed Spring Animation Engine (`IslandOverlayView.kt`, `BounceClick.kt`, `SmartIslandOverlayService.kt`)**:
+- **Ultra-Fluid, High-Speed Spring Animation Engine (`IslandOverlayView.kt`, `BounceClick.kt`, `IslaOverlayService.kt`)**:
   - **Unified High-Fluidity Spring Physics**: Synchronized width and height morphing to calibrated spring curves (`stiffness = 520f`, `dampingRatio = 0.72f` / `0.76f`), completely eliminating the asymmetric height snap.
   - **Snappy 190ms Cross-Fades**: Reduced alpha transition duration to a responsive 190ms with smooth cubic bezier easing for instant tactile feedback.
   - **Cohesive Content Morphing**: Refined entry scaling (`0.95f → 1f`) and slide (`-6.dp → 0.dp`) for natural, seamless card expansion and collapsing.
-  - **Instant Overlay Window Cleanup**: Reduced overlay collapse debounce from 500ms to 220ms in `SmartIslandOverlayService.kt` so touches behind the collapsed island resume without delay.
+  - **Instant Overlay Window Cleanup**: Reduced overlay collapse debounce from 500ms to 220ms in `IslaOverlayService.kt` so touches behind the collapsed island resume without delay.
   - **Organic Multi-Notification Split Bubble Pop**: Secondary and tertiary companion bubbles spring out with a natural pop (`stiffness = 480f`, `dampingRatio = 0.68f`) and synchronized offset morphing (`520f`).
   - **Tactile Notification Cycling Rebound**: Upgraded `switchScaleAnim` on cycling notifications with fast 40ms compression (`0.92f`) and immediate spring rebound (`stiffness = 650f`, `dampingRatio = 0.62f`).
   - **Tactile Spring Bounce Controls**: Enhanced `.bounceClick` with spring scale physics across all buttons, playback controls, reply buttons, quick action chips, and cards.
-- **Tap Anywhere on Expanded Cards to Open Target App (`IslandExpandedContent.kt`, `IslandOverlayView.kt`, `SmartIslandOverlayService.kt`)**:
+- **Tap Anywhere on Expanded Cards to Open Target App (`IslandExpandedContent.kt`, `IslandOverlayView.kt`, `IslaOverlayService.kt`)**:
   - Tapping anywhere on neutral areas of any expanded card (e.g. background, artwork, song/artist title, notification body, message text, header, padding) outside interactive buttons opens that notification's application (or system settings for Bluetooth/Battery/Hotspot/Alarms) and smoothly collapses the island.
   - Interactive child elements (Play/Pause, Skip, Seekbar, Reply input, Action chips) retain isolated click handling.
   - Preserves ongoing music notifications when launching music apps (Spotify, YouTube Music, etc.).
-- **Auto-Hide Pill Inactivity Timer with Custom Seconds & Tap-to-Reveal (`NotificationsAndPrivacySection.kt`, `SmartIslandSettingsRepository.kt`, `IslandOverlayView.kt`)**:
+- **Auto-Hide Pill Inactivity Timer with Custom Seconds & Tap-to-Reveal (`NotificationsAndPrivacySection.kt`, `IslaSettingsRepository.kt`, `IslandOverlayView.kt`)**:
   - New setting **"Auto-Hide Pill After Inactivity"** in the Notifications & Privacy section.
   - User-configurable timeout (1s to 60s) with 1-tap quick presets (3s, 5s, 10s, 15s, 30s) and a custom duration slider with micro `+`/`-` buttons.
   - When collapsed, if left inactive for the configured duration, the pill and companion circle smoothly shrink to 0 size / 0 alpha even if notifications or music are active.
   - **First Tap (Awaken)**: Tapping the invisible touch target over the cutout/island location awakens and smoothly restores the pill (and companion circle).
-  - **Second Tap (Expand)**: Tapping the visible pill expands into the full SmartIsland card.
+  - **Second Tap (Expand)**: Tapping the visible pill expands into the full Isla card.
   - Any new incoming notification or user interaction immediately awakens the pill and resets the timer.
-- **Landscape Mode Visibility Toggle (`NotificationsAndPrivacySection.kt`, `SmartIslandSettingsRepository.kt`, `SmartIslandOverlayService.kt`)**:
+- **Landscape Mode Visibility Toggle (`NotificationsAndPrivacySection.kt`, `IslaSettingsRepository.kt`, `IslaOverlayService.kt`)**:
   - New setting **"Show in Landscape Mode"** in the Display & Expansion section.
   - Allows the island to remain active, visible, and dynamically repositioned when rotating the device to landscape orientation.
 - **Full Chinese & Portuguese Localization Parity (`values-zh`, `values-zh-rCN`, `values-pt`, `values-pt-rBR`)**:
@@ -247,8 +247,8 @@ Smart Island **v7.0.0** is a landmark major release delivering comprehensive imp
 
 ### Added
 
-- **Island Background Opacity & Translucency Controls (`CustomizationsSection.kt`, `PositionsSection.kt`, `SmartIslandSettingsRepository.kt`)**:
-  - Added continuous opacity adjustment (`SmartIslandSettings.MIN_OPACITY` = 0.20f to `MAX_OPACITY` = 1.00f) with live percentage readouts.
+- **Island Background Opacity & Translucency Controls (`CustomizationsSection.kt`, `PositionsSection.kt`, `IslaSettingsRepository.kt`)**:
+  - Added continuous opacity adjustment (`IslaSettings.MIN_OPACITY` = 0.20f to `MAX_OPACITY` = 1.00f) with live percentage readouts.
   - Dedicated **"Island Opacity & Transparency"** cards integrated in both **Appearance & Colors Studio** and **Position & Geometry** tabs.
   - 4 quick 1-tap presets: **100% Solid**, **85% Dark**, **70% Glass**, and **50% Clear**.
   - Micro-increment buttons (`+/- 5%`) for fine precision adjustments.
@@ -258,7 +258,7 @@ Smart Island **v7.0.0** is a landmark major release delivering comprehensive imp
   - **Asynchronous `AppIconMemoryCache`**: Built an in-memory LRU icon cache backed by `Dispatchers.IO` loading to prevent main-thread binder stalls during rapid scrolling.
   - **"Delete by App" Support**: Added `deleteByPackage` in SQLite helper and repository, accompanied by an interactive modal displaying per-app notification counts, 1-tap filtering, and bulk deletion with confirmation.
   - **In-Memory State Management**: Optimized repository updates to directly maintain the in-memory history state without executing heavy full-table SQLite re-queries on every incoming notification or deletion.
-  - **Throttled Pruning Routine**: Throttled automated history database cleanup in `SmartIslandNotificationListenerService` to run at most once every 15 minutes.
+  - **Throttled Pruning Routine**: Throttled automated history database cleanup in `IslaNotificationListenerService` to run at most once every 15 minutes.
 - **Gesture Guide Interactive Layout Overhaul (`GesturesSection.kt`)**:
   - Replaced cramped 5-badge single row with a responsive 2-column clickable badge grid with generous tap targets.
   - 1-tap quick navigation: Tapping any gesture summary badge immediately switches to that gesture's step-by-step interactive guide.
@@ -267,8 +267,8 @@ Smart Island **v7.0.0** is a landmark major release delivering comprehensive imp
 ### Fixed & Improved
 
 - **Multi-Device Crash Prevention & System Service Guards**:
-  - `SmartIslandOverlayService`: Converted `KeyguardManager` and `NotificationManager` casts to safe `as?` lookups with guarded null checks to prevent crashes on specialized OEM builds.
-  - `SmartIslandNotificationListenerService`: Wrapped `activeNotifications` iteration and nullable `mediaSessionManager` queries with safe calls and `runCatchingLogged` blocks.
+  - `IslaOverlayService`: Converted `KeyguardManager` and `NotificationManager` casts to safe `as?` lookups with guarded null checks to prevent crashes on specialized OEM builds.
+  - `IslaNotificationListenerService`: Wrapped `activeNotifications` iteration and nullable `mediaSessionManager` queries with safe calls and `runCatchingLogged` blocks.
   - `LaunchableApp`: Guarded `AppOpsManager` and `UsageStatsManager` usage access resolution in `runCatching`.
   - `SystemEventReceiver`: Fixed `ACTION_BATTERY_CHANGED` sticky broadcast probe registration on Android 14+ (API 34+) using `Context.RECEIVER_EXPORTED`.
   - `LiveActivityParser`: Fixed regex state evaluation bug by caching extracted duration minutes in local variable to prevent `IllegalStateException: No match found`.
@@ -284,7 +284,7 @@ Smart Island **v7.0.0** is a landmark major release delivering comprehensive imp
 
 ### Added
 
-- **Inline-Reply Input & Soft-Keyboard WindowManager Focus Handling (`NotificationExpanded.kt`, `SmartIslandOverlayService.kt`)**:
+- **Inline-Reply Input & Soft-Keyboard WindowManager Focus Handling (`NotificationExpanded.kt`, `IslaOverlayService.kt`)**:
   - Direct inline text reply right inside the expanded Island notification card for messaging apps (WhatsApp, Telegram, Signal, SMS, Slack, etc.).
   - **Dynamic WindowManager Focus Switching**:
     - Switches overlay window from non-focusable (`FLAG_NOT_FOCUSABLE`) for normal touch pass-through to input-ready focusable mode (`FLAG_ALT_FOCUSABLE_IM` / input method aware) with `SOFT_INPUT_ADJUST_PAN` / `SOFT_INPUT_ADJUST_RESIZE` when typing.
@@ -331,7 +331,7 @@ Smart Island **v7.0.0** is a landmark major release delivering comprehensive imp
     - `NavigationParserTest` (32 lines): Route instruction and ETA regex extraction tests.
     - `NotificationHistoryEntryTest` (65 lines): SQLite entity serialization and category mapping tests.
     - `IslandViewModelTest` (54 lines): Inline-reply active input state and auto-collapse suppression tests.
-    - `SmartIslandNotificationRepositoryTest` (26 lines): Repository flow and timer/stopwatch state tests.
+    - `IslaNotificationRepositoryTest` (26 lines): Repository flow and timer/stopwatch state tests.
 
 ### Changed
 
@@ -343,7 +343,7 @@ Smart Island **v7.0.0** is a landmark major release delivering comprehensive imp
 ### Fixed
 
 - **Soft-Keyboard Overlay Focus**: Dynamically adjusted WindowManager layout flags (`FLAG_NOT_FOCUSABLE` / `FLAG_ALT_FOCUSABLE_IM`) during inline reply text input, preventing touch blocking while allowing smooth keyboard entry.
-- **Notification Suppression Race Condition**: Enhanced retry handling and self-cancellation tracking in `SmartIslandNotificationListenerService` to avoid missed dismissals.
+- **Notification Suppression Race Condition**: Enhanced retry handling and self-cancellation tracking in `IslaNotificationListenerService` to avoid missed dismissals.
 - **Turn-by-Turn Instruction Truncation**: Fixed route text truncation and maneuver icon extraction in navigation mode.
 - **CI Lint Cleanups**: Resolved AndroidGradlePluginVersion and AGP deprecation lint warnings for 100% clean builds.
 
@@ -358,7 +358,7 @@ Smart Island **v7.0.0** is a landmark major release delivering comprehensive imp
     - *Charging*: Electric green lightning bolt with remaining charge time estimate.
   - Broadcast receiver integration via `ACTION_BATTERY_LOW`, `ACTION_BATTERY_OKAY`, and `ACTION_POWER_SAVE_MODE_CHANGED` in `SystemEventReceiver`.
 - **Full-Color App Launcher Icons (v4 Parity)**:
-  - Restored `loadAppIconBitmap(packageName)` utilizing `packageManager.getApplicationIcon(packageName)` with LRU bitmap caching in `SmartIslandNotificationListenerService`.
+  - Restored `loadAppIconBitmap(packageName)` utilizing `packageManager.getApplicationIcon(packageName)` with LRU bitmap caching in `IslaNotificationListenerService`.
   - Displays original, full-color application launcher icons (WhatsApp, Snapchat, Gmail, Instagram, etc.) in the collapsed pill and expanded cards, eliminating 1-bit status bar silhouettes.
 - **Message Sync Notification Filtering**:
   - Implemented `NotificationFilter.isMessageSyncNotification` to detect background chat polling and synchronization notifications (*"Syncing messages..."*, *"Checking for new messages"*, *"Connecting..."*, *"Syncing snaps"*).
@@ -439,36 +439,36 @@ Smart Island **v7.0.0** is a landmark major release delivering comprehensive imp
 - **Notification Shade Suppression Controls**: Added a dedicated "Hide from notification shade" setting under Notifications & Privacy (defaulting to off) allowing optional suppression of third-party notifications from Android's system shade.
 - **OEM Vendor ROM Stability Fixes**: Added background autostart and keep-alive guards to prevent aggressive OEM Accessibility Service kills on heavy vendor ROMs (MIUI/HyperOS, ColorOS/RealmeUI, FuntouchOS, OneUI).
 - **Shizuku 1-Tap Restricted Settings & Permission Grant**: Added 1-tap Shizuku execution to auto-grant Restricted Settings (`ACCESS_RESTRICTED_SETTINGS`), Usage Access (`GET_USAGE_STATS`), System Overlay, Accessibility, Notification Access, and Battery Whitelist without manual setup.
-- **Direct Notification Listener Detail Intent**: Enhanced the Notification Listener permission launcher to open directly to Smart Island's toggle page via `ACTION_NOTIFICATION_LISTENER_DETAIL_SETTINGS`.
-- **Customizable Island Action Buttons**: Added toggle settings allowing users to customize and remove action buttons from the Smart Island overlay.
+- **Direct Notification Listener Detail Intent**: Enhanced the Notification Listener permission launcher to open directly to Isla's toggle page via `ACTION_NOTIFICATION_LISTENER_DETAIL_SETTINGS`.
+- **Customizable Island Action Buttons**: Added toggle settings allowing users to customize and remove action buttons from the Isla overlay.
 - **New Application Icon**: Introduced a refreshed, modern application launcher icon and updated visual app assets.
 - **Clear Test Notifications Option**: Added a dedicated "Clear Test Notifications" action in the Quick Testing dashboard section to immediately remove test and active island overlays.
 
 ### Changed
 
-- **Accessibility Service Lifecycle**: Refactored service toggle logic so disabling Smart Island removes the pill overlay without calling `disableSelf()`, preventing permission revocation and eliminating the need for users to re-grant permissions.
+- **Accessibility Service Lifecycle**: Refactored service toggle logic so disabling Isla removes the pill overlay without calling `disableSelf()`, preventing permission revocation and eliminating the need for users to re-grant permissions.
 - **Settings UI & Navigation Redesign**: Redesigned the settings screen layout, introduced a dedicated bottom navigation bar, and restructured settings DataStore management.
-- **DataStore & IO Exception Recovery**: Implemented atomic DataStore update operations and automatic IOException recovery in `SmartIslandSettingsRepository`.
-- **Notification Repository Bounding**: Enforced atomic `MutableStateFlow` updates, a 50-notification queue limit, and automatic stale key cleanup in `SmartIslandNotificationRepository`.
+- **DataStore & IO Exception Recovery**: Implemented atomic DataStore update operations and automatic IOException recovery in `IslaSettingsRepository`.
+- **Notification Repository Bounding**: Enforced atomic `MutableStateFlow` updates, a 50-notification queue limit, and automatic stale key cleanup in `IslaNotificationRepository`.
 - **Updated Application Screenshots**: Refreshed all 12 high-resolution application screenshots in repository documentation showcasing the v3.2.1 dashboard, Shizuku setup, Notifications & Privacy, color picker, positions, app launcher, gesture guide, music player, and battery charging overlays.
 - **Release Version**: Updated application version to `3.2.1` (versionCode `3`).
 
 ### Fixed
 
-- **Permission State Decoupling**: Decoupled runtime permission validation state from the main Smart Island service toggle in `SmartIslandHomeScreen`.
+- **Permission State Decoupling**: Decoupled runtime permission validation state from the main Isla service toggle in `IslaHomeScreen`.
 - **Main Thread Execution**: Removed main-thread `Thread.sleep()` calls during overlay removal for smooth asynchronous cleanup.
 
 ## [3.2] - 2026-07-18
 
 ### Added
 
-- **System Notification Suppression & Listener Service (`SmartIslandNotificationListenerService`)**: Implemented system notification filtering (`NotificationFilter`) and notification listener integration to present notifications in the island while suppressing duplicate heads-up alerts and system shade entries when active.
-- **Landscape Orientation Listener (`IslandOrientationListener`)**: Added automatic orientation change detection to dynamically remove and hide the Smart Island overlay in landscape mode, ensuring uninterrupted full-screen gaming and video playback.
+- **System Notification Suppression & Listener Service (`IslaNotificationListenerService`)**: Implemented system notification filtering (`NotificationFilter`) and notification listener integration to present notifications in the island while suppressing duplicate heads-up alerts and system shade entries when active.
+- **Landscape Orientation Listener (`IslandOrientationListener`)**: Added automatic orientation change detection to dynamically remove and hide the Isla overlay in landscape mode, ensuring uninterrupted full-screen gaming and video playback.
 - **Battery Optimization Setup Section**: Expanded the Permissions configuration screen with a dedicated guidance card for setting Battery Optimization to 'No restrictions' to ensure OS background execution protection.
 - **Lock Screen Privacy & Controls**: Introduced lock screen visibility settings (`showOnLockScreen`, `hideSensitiveOnLockScreen`) to allow opt-in island display while respecting user privacy.
-- **Strict Permission Guard**: Enforced runtime permission validation before enabling the main Smart Island service toggle switch.
+- **Strict Permission Guard**: Enforced runtime permission validation before enabling the main Isla service toggle switch.
 - **Overlay System Warning Toggle**: Added a direct settings action to guide users on hiding the persistent "displaying over other apps" system notification.
-- **Community Contributions & PR Merges**: Integrated Pull Request [#11](https://github.com/agupta07505/SmartIsland/pull/11) contributed by [@likhithkrishna1103-tech](https://github.com/likhithkrishna1103-tech) (Likhith Krishna) bringing foundational improvements to lock screen privacy settings, hidden API restriction bypass for touchable regions, notification icon handling, and music player responsiveness.
+- **Community Contributions & PR Merges**: Integrated Pull Request [#11](https://github.com/urfavxbf/isla/pull/11) contributed by [@likhithkrishna1103-tech](https://github.com/likhithkrishna1103-tech) (Likhith Krishna) bringing foundational improvements to lock screen privacy settings, hidden API restriction bypass for touchable regions, notification icon handling, and music player responsiveness.
 
 ### Changed
 
@@ -494,8 +494,8 @@ Smart Island **v7.0.0** is a landmark major release delivering comprehensive imp
 
 ### Added
 
-- **First-Run Welcome Experience**: Added a polished welcome dialog that introduces Smart Island's privacy-first approach and gives new users a clear starting point.
-- **Community Shortcuts**: Added direct actions in the welcome dialog for starring the project on GitHub and joining the Smart Island Telegram community.
+- **First-Run Welcome Experience**: Added a polished welcome dialog that introduces Isla's privacy-first approach and gives new users a clear starting point.
+- **Community Shortcuts**: Added direct actions in the welcome dialog for starring the project on GitHub and joining the Isla Telegram community.
 - **Persistent Welcome State**: Added a local DataStore preference so the welcome dialog is shown only once after installation.
 
 ### Changed
@@ -507,7 +507,7 @@ Smart Island **v7.0.0** is a landmark major release delivering comprehensive imp
 ### Planned next
 
 - Fix collapsed-pill touch reliability as the first v3.2 release blocker.
-- Add opt-in, privacy-safe Smart Island support on the lock screen after the touch fix is verified.
+- Add opt-in, privacy-safe Isla support on the lock screen after the touch fix is verified.
 
 ## [3.0.0] - 2026-07-10
 
@@ -559,15 +559,15 @@ Smart Island **v7.0.0** is a landmark major release delivering comprehensive imp
 
 ### Added
 
-- **Centralized Notification Repository (`SmartIslandNotificationRepository`)**: Created to manage notification streams and commands flow reactively.
-- **Dependency Injection**: Registered `SmartIslandApp` Application class to hold repositories singletons.
+- **Centralized Notification Repository (`IslaNotificationRepository`)**: Created to manage notification streams and commands flow reactively.
+- **Dependency Injection**: Registered `IslaApp` Application class to hold repositories singletons.
 - **Material 3 Unified Theme**: Introduced day/night theme structure with DayNight Material3 scheme support.
-- **Automated Tests**: Created JUnit/MockK test suites: `IslandModeMappingTest`, `NotificationPriorityTest`, `SmartIslandSettingsTest`.
+- **Automated Tests**: Created JUnit/MockK test suites: `IslandModeMappingTest`, `NotificationPriorityTest`, `IslaSettingsTest`.
 - **Utility Modules**: Created isolated helper scripts `TimeUtils` and `LogUtils`.
 
 ### Changed
 
-- **Modularized UI Structure**: Split monolithic screen `SmartIslandHomeScreen.kt` into clean components: `HeaderSection`, `PermissionsSection`, `PositionsSection`, `SupportSection`, and `AboutSection`.
+- **Modularized UI Structure**: Split monolithic screen `IslaHomeScreen.kt` into clean components: `HeaderSection`, `PermissionsSection`, `PositionsSection`, `SupportSection`, and `AboutSection`.
 - **Decoupled Architecture**: Migrated views `IslandOverlayView.kt` and `IslandExpandedContent.kt` from calling static service instances to reactively communicating via repositories.
 - **Resource Maintainability**: Moved hardcoded screen UI strings into standard `strings.xml` resource tags.
 - **Build Configurations**: Enabled ProGuard/R8 minification, resource shrinking, and strict lint checks in `build.gradle.kts`.
@@ -597,14 +597,14 @@ Smart Island **v7.0.0** is a landmark major release delivering comprehensive imp
 - **App Startup Crash**: Resolved startup crash on launch due to Compose `painterResource` trying to parse the adaptive vector launcher icon xml. Fixed by dynamically extracting the launcher icon drawable and rendering it to a Canvas-backed bitmap.
 - **Overlay "Non-Touchable" Dead Zone**: Corrected height calculation of the collapsed overlay window by removing the status bar height offset and extra padding, keeping the window size tight to the visual bounds.
 - **Pill Gestures and Swipe Interceptions**: Fixed direct tap gesture failures in the collapsed pill and swipe-up/down failures by capturing reactive state delegates to prevent stale state retention.
-- **Controls State Synchronization**: Fixed state mismatch issues where loop state changes made inside external media apps (e.g., Spotify) did not reflect in the Smart Island overlay. Added custom extras query prioritization and strict toggling logic to avoid double-activation cycles.
+- **Controls State Synchronization**: Fixed state mismatch issues where loop state changes made inside external media apps (e.g., Spotify) did not reflect in the Isla overlay. Added custom extras query prioritization and strict toggling logic to avoid double-activation cycles.
 - **Live Progress Catchup**: Fixed seek bar staying at its previous position on re-expand by querying live playback state offsets immediately upon window expansion.
 
 ## [1.0.0] - 2026-07-04
 
 ### Added
 
-- Initial open-source baseline for the Smart Island Android app.
+- Initial open-source baseline for the Isla Android app.
 - Floating overlay service with animated collapsed and expanded island states.
 - Notification listener integration for notification, incoming-call, and media modes.
 - Local customization for island size, position, and corner radius.

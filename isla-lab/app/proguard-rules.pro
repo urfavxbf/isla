@@ -1,4 +1,4 @@
-# Smart Island Proguard Rules
+# Isla Proguard Rules
 
 # Keep Compose Runtime and library classes
 -keep class androidx.compose.** { *; }
@@ -6,7 +6,7 @@
 # Keep DataStore Preferences serializer/keys
 -keep class androidx.datastore.preferences.core.** { *; }
 
-# Keep reflection targets used in SmartIslandOverlayService
+# Keep reflection targets used in IslaOverlayService
 -keep class android.view.ViewTreeObserver$OnComputeInternalInsetsListener { *; }
 -keep class android.view.ViewTreeObserver {
     public void addOnComputeInternalInsetsListener(android.view.ViewTreeObserver$OnComputeInternalInsetsListener);

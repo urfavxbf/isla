@@ -1,6 +1,6 @@
-# Contributing To Smart Island
+# Contributing To Isla
 
-Thanks for helping make Smart Island better. This project is public, so please keep issues, pull requests, screenshots, and logs free of private notification content, secrets, keystores, tokens, and local machine paths.
+Thanks for helping make Isla better. This project is public, so please keep issues, pull requests, screenshots, and logs free of private notification content, secrets, keystores, tokens, and local machine paths.
 
 ## Ways To Contribute
 
@@ -8,7 +8,7 @@ Thanks for helping make Smart Island better. This project is public, so please k
 - Suggest focused feature ideas.
 - Improve Compose UI, animations, accessibility, or Android compatibility.
 - Add tests, documentation, and device-specific notes.
-- Translate Smart Island into your language or polish existing strings (see `app/src/main/res/values-*/` and `scripts/translate_strings.py`).
+- Translate Isla into your language or polish existing strings (see `app/src/main/res/values-*/` and `scripts/translate_strings.py`).
 - Refactor carefully when it reduces real complexity.
 
 ## Development Setup

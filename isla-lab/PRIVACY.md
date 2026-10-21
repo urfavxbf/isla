@@ -2,11 +2,11 @@
 
 Last updated: July 4, 2026
 
-Smart Island is designed to run locally on your Android device. This document explains what the app can access and how that information is used.
+Isla is designed to run locally on your Android device. This document explains what the app can access and how that information is used.
 
 ## Information The App Processes
 
-When you enable notification listener access, Smart Island can process notification metadata from other apps so it can display the floating island experience. This may include:
+When you enable notification listener access, Isla can process notification metadata from other apps so it can display the floating island experience. This may include:
 
 - App name and package name
 - Notification title and text
@@ -25,7 +25,7 @@ Settings are used to remember your preferred island appearance and position.
 
 ## Data Sharing
 
-At the time of this policy, Smart Island:
+At the time of this policy, Isla:
 
 - Does not request the Android `INTERNET` permission.
 - Does not include analytics or advertising SDKs.
@@ -36,13 +36,13 @@ External links in the app may open GitHub, email, or social/profile pages in ano
 
 ## Data Retention
 
-Notification details are kept in app memory while Smart Island is running and while the notification is active in the island. Local settings are stored on your device using AndroidX DataStore Preferences until you clear app data or uninstall the app.
+Notification details are kept in app memory while Isla is running and while the notification is active in the island. Local settings are stored on your device using AndroidX DataStore Preferences until you clear app data or uninstall the app.
 
 ## Your Controls
 
 You can:
 
-- Turn off Smart Island in the app.
+- Turn off Isla in the app.
 - Revoke overlay permission in Android settings.
 - Revoke notification listener access in Android settings.
 - Clear app storage or uninstall the app to remove local settings.

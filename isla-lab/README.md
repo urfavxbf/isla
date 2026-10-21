@@ -1,23 +1,23 @@
 <p align="center">
-  <img src="assets/logo.png" width="108" height="108" alt="Smart Island Logo" />
+  <img src="assets/logo.png" width="108" height="108" alt="Isla Logo" />
 </p>
 
-<h1 align="center">Smart Island</h1>
+<h1 align="center">Isla</h1>
 
 <p align="center">
   <strong>A lightweight, privacy-first Android overlay that shows notifications, media, calls and more around your camera cutout.</strong>
 </p>
 
 <p align="center">
-  <a href="https://github.com/agupta07505/SmartIsland/releases">
-    <img src="https://img.shields.io/github/v/release/agupta07505/SmartIsland?style=for-the-badge&color=6366f1&labelColor=1e1e2e&logo=github&logoColor=white" alt="Latest Release" />
+  <a href="https://github.com/urfavxbf/isla/releases">
+    <img src="https://img.shields.io/github/v/release/agupta07505/Isla?style=for-the-badge&color=6366f1&labelColor=1e1e2e&logo=github&logoColor=white" alt="Latest Release" />
   </a>
   <img src="https://img.shields.io/badge/Platform-Android%208.0%2B-3DDC84?style=for-the-badge&labelColor=1e1e2e&logo=android&logoColor=white" alt="Android 8.0+" />
   <img src="https://img.shields.io/badge/License-GNU%20GPLv3-3b82f6?style=for-the-badge&labelColor=1e1e2e&logo=gnu&logoColor=white" alt="GNU GPLv3" />
-  <a href="https://github.com/agupta07505/SmartIsland/actions/workflows/build.yml">
-    <img src="https://img.shields.io/github/actions/workflow/status/agupta07505/SmartIsland/build.yml?branch=main&style=for-the-badge&labelColor=1e1e2e&label=CI&color=10b981&logo=githubactions&logoColor=white" alt="CI Build Status" />
+  <a href="https://github.com/urfavxbf/isla/actions/workflows/build.yml">
+    <img src="https://img.shields.io/github/actions/workflow/status/agupta07505/Isla/build.yml?branch=main&style=for-the-badge&labelColor=1e1e2e&label=CI&color=10b981&logo=githubactions&logoColor=white" alt="CI Build Status" />
   </a>
-  <a href="https://telegram.me/SmartIslandApp" target="_blank">
+  <a href="https://telegram.me/IslaApp" target="_blank">
     <img src="https://img.shields.io/badge/Telegram-Community-2CA5E0?style=for-the-badge&labelColor=1e1e2e&logo=telegram&logoColor=white" alt="Telegram Community" />
   </a>
   <a href="https://www.virustotal.com/gui/file/c07da408e7fa3e3fdeb25ec6415af07f1d56eff099840221138e9364c6065102/details" target="_blank">
@@ -38,7 +38,7 @@
 
 ## What it is
 
-Smart Island puts a small pill around your camera cutout or status bar. Notifications, music, calls, charging, timers and navigation show up in it, and a tap opens each one into a card. When nothing is going on, a clock, the weather, your net speed or the next alarm take turns in the same spot.
+Isla puts a small pill around your camera cutout or status bar. Notifications, music, calls, charging, timers and navigation show up in it, and a tap opens each one into a card. When nothing is going on, a clock, the weather, your net speed or the next alarm take turns in the same spot.
 
 Everything happens on your device. There is no account, no analytics and no cloud.
 
@@ -111,7 +111,7 @@ The app is built with **Material 3**, so settings, switches and dialogs match th
 
 ### Languages
 
-Smart Island is translated into **Spanish, Japanese, Brazilian Portuguese, and Simplified Chinese** in addition to English.
+Isla is translated into **Spanish, Japanese, Brazilian Portuguese, and Simplified Chinese** in addition to English.
 
 Translations live in `app/src/main/res/values-<locale>/`. If you would like to help translate into another language or polish existing phrases, see [CONTRIBUTING.md](CONTRIBUTING.md). An automated helper script is included at [`scripts/translate_strings.py`](scripts/translate_strings.py) powered by LibreTranslate.
 
@@ -135,7 +135,7 @@ Translations live in `app/src/main/res/values-<locale>/`. If you would like to h
 
 ## Privacy & permissions
 
-Smart Island asks for what it needs to do its job and nothing more:
+Isla asks for what it needs to do its job and nothing more:
 
 - **Overlay and notification access** to draw the island and read alerts, media and timers.
 - **Foreground service and battery optimisation** so Android keeps it alive.
@@ -152,8 +152,8 @@ More in [PRIVACY.md](PRIVACY.md) and [SECURITY.md](SECURITY.md). You can also ch
 You need the Android SDK (API 26 to 36), JDK 17 and the bundled Gradle wrapper.
 
 ```bash
-git clone https://github.com/agupta07505/SmartIsland.git
-cd SmartIsland
+git clone https://github.com/urfavxbf/isla.git
+cd Isla
 ./gradlew assembleDebug
 adb install -r app/build/outputs/apk/debug/app-debug.apk
 ```
@@ -166,11 +166,11 @@ It is written in Kotlin with Jetpack Compose and Material 3, uses Hilt for injec
 
 ## Community
 
-Come say hi on [Telegram](https://telegram.me/SmartIslandApp). Plans live in [ROADMAP.md](ROADMAP.md), history in [CHANGELOG.md](CHANGELOG.md), and contributions are welcome, see [CONTRIBUTING.md](CONTRIBUTING.md) and the [code of conduct](CODE_OF_CONDUCT.md).
+Come say hi on [Telegram](https://telegram.me/IslaApp). Plans live in [ROADMAP.md](ROADMAP.md), history in [CHANGELOG.md](CHANGELOG.md), and contributions are welcome, see [CONTRIBUTING.md](CONTRIBUTING.md) and the [code of conduct](CODE_OF_CONDUCT.md).
 
 ---
 
 ## License
 
-Smart Island is licensed under the [GNU General Public License v3.0](LICENSE).  
+Isla is licensed under the [GNU General Public License v3.0](LICENSE).  
 Copyright (C) 2026 **Animesh Gupta**.

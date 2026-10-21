@@ -2,7 +2,7 @@
 <resources>
     <string name="app_name">智能岛</string>
     <string name="app_subtitle">浮动动态重叠</string>
-    <string name="app_description">Smart Island再造Android通知.</string>
+    <string name="app_description">Isla再造Android通知.</string>
     <string name="accessibility_service_label">智能岛服务</string>
     <string name="accessibility_service_description">使智能岛可以坐在状态栏的顶部 这样你就可以在摄影机切开时拍到药丸 不受触摸干扰.</string>
     <string name="grant_accessibility">允许在状态栏上重排</string>
@@ -21,7 +21,7 @@
     <string name="status_setup_needed">需要设置</string>
     <string name="status_action_required">需要采取的行动</string>
     <string name="btn_grant_required_permissions">授予权限</string>
-    <string name="enable_smart_island">启用智能岛</string>
+    <string name="enable_isla">启用智能岛</string>
     <string name="overlay_ready">重叠服务准备好了</string>
     <string name="grant_overlay">允许重叠启动权限</string>
     <string name="simulation_lab_title">试试看</string>
@@ -122,11 +122,11 @@
     <string name="shizuku_success">通过静音给予的许可</string>
     <string name="shizuku_failed">Shizuku 设置失败：%1$s</string>
     <string name="perm_accessibility_title">可访问性重叠</string>
-    <string name="perm_accessibility_desc">允许 Smart Island 动态浮动在状态栏和 Notch 区域上方</string>
+    <string name="perm_accessibility_desc">允许 Isla 动态浮动在状态栏和 Notch 区域上方</string>
     <string name="perm_notification_title">通知访问</string>
     <string name="perm_notification_desc">读取收到的信息、电话、媒体元数据以及实时跟踪提示</string>
     <string name="perm_bluetooth_title">近距离设备</string>
-    <string name="perm_bluetooth_desc">允许 Smart Island 检测蓝牙设备连接并显示连接设备事件</string>
+    <string name="perm_bluetooth_desc">允许 Isla 检测蓝牙设备连接并显示连接设备事件</string>
     <string name="perm_battery_title">电池优化</string>
     <string name="perm_battery_desc">防止Android和侵略性OEM任务杀手终止背景服务</string>
     <string name="perm_status_granted">获准</string>
@@ -241,7 +241,7 @@
     <string name="gesture_4_swipe_down_desc">从岛卡上向下拖动启动Android Freeform Floating Window 多任务模式的主动应用程序.</string>
     <string name="gesture_5_swipe_horizontal_title">5. 横向刷(左/右)</string>
     <string name="gesture_5_swipe_horizontal_sub">在多个通知之间切换</string>
-    <string name="gesture_5_swipe_horizontal_desc">当多个通知在Smart Island中排队时,在扩展的卡片上横向刷左或右,以在活动提醒之间插页.</string>
+    <string name="gesture_5_swipe_horizontal_desc">当多个通知在Isla中排队时,在扩展的卡片上横向刷左或右,以在活动提醒之间插页.</string>
     <string name="enable_swipe_gestures_title">启用刷新手势</string>
     <string name="enable_swipe_gestures_desc">启用在岛上的刷卡动作 。 关闭以完全禁用所有刷卡手势,并防止意外行动.</string>
     <string name="swipe_customization_title">自定义刷新动作</string>
@@ -321,7 +321,7 @@
     <string name="toggle_quick_actions_title">通知快速行动</string>
     <string name="toggle_quick_actions_desc">在扩展名片中显示可操作按钮, 如回复、 Mark Read 和 dispission</string>
     <string name="toggle_mirror_only_title">只镜像( 从系统阴影隐藏)</string>
-    <string name="toggle_mirror_only_desc">仅在 Smart Island 中显示通知并隐藏默认通知阴影</string>
+    <string name="toggle_mirror_only_desc">仅在 Isla 中显示通知并隐藏默认通知阴影</string>
     <string name="toggle_auto_hide_idle_title">空闲时自动隐藏药丸</string>
     <string name="toggle_auto_hide_idle_desc">当没有主动提醒、音乐或动态事件时, 完全隐藏药丸</string>
     <string name="toggle_auto_hide_pill_title">不活动后自动隐藏药丸</string>
@@ -363,13 +363,13 @@
     <string name="no_installed_apps_found">找不到已安装的应用程序</string>
     <string name="no_apps_matching_query">没有匹配“%1$s”的应用</string>
     <string name="btn_manage_apps">选择要管理的应用程序</string>
-    <string name="all_apps_enabled_note">所有已安装的应用软件目前都在Smart Island上以声音活动.</string>
+    <string name="all_apps_enabled_note">所有已安装的应用软件目前都在Isla上以声音活动.</string>
     <string name="customized_apps_title">自定义应用（%1$d）</string>
     <string name="app_options_title">%1$s 设置</string>
     <string name="option_island_notifications">智能岛通知</string>
     <string name="option_island_notifications_desc">在岛药丸和扩展视图中显示此应用程序的通知</string>
     <string name="option_island_sound">岛屿通知声音</string>
-    <string name="option_island_sound_desc">在 Smart Island 播放此应用提醒时的音效</string>
+    <string name="option_island_sound_desc">在 Isla 播放此应用提醒时的音效</string>
     <string name="option_cooldown_bypass">绕道反垃圾邮件冷却</string>
     <string name="option_cooldown_bypass_desc">随时注意,即使是在快速信息流中</string>
     <string name="tag_excluded_from_island">不包括在岛屿</string>
@@ -480,7 +480,7 @@
     <string name="backup_export_card_desc">使用 Android 存储访问框架将您当前的岛屿几何、自定义主题和规则保存为可移植的.json文件.</string>
     <string name="btn_export_backup">导出备份( JSON)</string>
     <string name="backup_restore_card_title">从备份恢复</string>
-    <string name="backup_restore_card_desc">选择先前导出的 Smart Island JSON 备份文件以恢复您的调整和配置 .</string>
+    <string name="backup_restore_card_desc">选择先前导出的 Isla JSON 备份文件以恢复您的调整和配置 .</string>
     <string name="btn_restore_backup">选择备份文件</string>
     <string name="backup_reset_card_title">重置为工厂默认值</string>
     <string name="backup_reset_card_desc">将所有岛屿的大小,位置,偏移,颜色主题,以及规则恢复到原来的默认值.</string>
@@ -493,7 +493,7 @@
     <string name="toast_backup_export_failed">保存备份失败：%1$s</string>
     <string name="toast_backup_restored_success">设置已成功恢复 !</string>
     <string name="toast_backup_restore_failed">恢复备份失败：%1$s</string>
-    <string name="toast_backup_invalid_file">选中的文件不是一个有效的 Smart Island 备份 .</string>
+    <string name="toast_backup_invalid_file">选中的文件不是一个有效的 Isla 备份 .</string>
     <string name="toast_reset_all_success">所有设置重设为默认值</string>
     <string name="btn_backup_restore_shortcut">备份恢复( R)</string>
     <string name="category_developer_options">开发者和诊断</string>
@@ -527,7 +527,7 @@
     <string name="dev_mode_unlocked_banner_title">开发者模式活动</string>
     <string name="dev_mode_unlocked_banner_desc">诊断记录和系统遥测可以在开发者选项中找到.</string>
     <string name="notch_mode_card_title">iPhone Notch 模式</string>
-    <string name="notch_mode_card_desc">将Smart Island转换成一个正宗的iPhone风格的notch停靠在顶端屏幕边缘,下角圆形,伴行圆圈零.</string>
+    <string name="notch_mode_card_desc">将Isla转换成一个正宗的iPhone风格的notch停靠在顶端屏幕边缘,下角圆形,伴行圆圈零.</string>
     <string name="notch_mode_toggle_title">启用 iPhone Notch 模式</string>
     <string name="notch_mode_toggle_desc">将岛屿停靠到顶端,并移除右侧第二圈</string>
     <string name="btn_apply_notch_preset">应用推荐的 iPhone Notch 大小</string>
@@ -682,8 +682,8 @@
     <string name="card_about_subtitle">版本、原始项目和许可证</string>
     <string name="detail_title_about">关于</string>
     <string name="about_version">%1$s版本</string>
-    <string name="about_based_on_title">根据SmartIsland 7.0</string>
-    <string name="about_based_on_body">本应用基于SmartIsland 7.0.0,由Animesh Gupta编写. 最初的项目是开源的;这个版本改变了它的动画,布局,设置和特征.</string>
+    <string name="about_based_on_title">根据Isla 7.0</string>
+    <string name="about_based_on_body">本应用基于Isla 7.0.0,由Animesh Gupta编写. 最初的项目是开源的;这个版本改变了它的动画,布局,设置和特征.</string>
     <string name="about_open_original">打开原始工程</string>
     <string name="about_no_browser">没有找到打开链接的应用程序 .</string>
     <string name="about_license_title">许可证</string>
@@ -796,7 +796,7 @@
     <string name="utility_pick_cancel">取消</string>
     <string name="utility_brightness">亮度</string>
     <string name="utility_volume">音量</string>
-    <string name="utility_brightness_permission">允许 Smart Island 修改系统设置以改变亮度</string>
+    <string name="utility_brightness_permission">允许 Isla 修改系统设置以改变亮度</string>
     <string name="utilities_editor_title">公用事业页面</string>
     <string name="utilities_editor_desc">在快速发射的窗口里刷上,以达到它. 网格为 2 行 4 图标: 点击空单元格以添加一个工具或应用程序部件, 按下并按住一个项目将其拖到另一个单元格或另一个项目以交换它们 .</string>
     <string name="utilities_editor_add_title">添加到公用事业</string>
@@ -844,7 +844,7 @@
     <string name="idle_widget_notifications_desc">未读信件和邮件来自您的所有信件和电子邮件应用程序, 作为剪切器左边的号码 。 点击它看每个应用程序有多少个。 跳过时没有.</string>
     <string name="idle_widget_modes_title">不干扰/ 模式</string>
     <string name="idle_widget_modes_desc">活动模式( Do Not Distructionb, Bedtime, drive,...)作为其剪切器左侧的图标. 点击模式\' 名称 。 没开的时候跳过 Grant Do Not Distrib 访问权限以区分模式(Android 15 或后期).</string>
-    <string name="idle_modes_access_desc">模式部件显示“ 不打扰” 。 要告诉Bedtime,驾驶和您的其他模式分开(Android 15或以后)并显示它们的名字,允许Smart Island在Do Not Distrub下访问. 它只读到哪个模式,它不会改变任何东西.</string>
+    <string name="idle_modes_access_desc">模式部件显示“ 不打扰” 。 要告诉Bedtime,驾驶和您的其他模式分开(Android 15或以后)并显示它们的名字,允许Isla在Do Not Distrub下访问. 它只读到哪个模式,它不会改变任何东西.</string>
     <string name="idle_modes_access_button">Grant 不干扰访问</string>
     <string name="idle_widgets_cycle_title">切换一次</string>
     <string name="idle_widgets_seconds">%1$d 秒</string>

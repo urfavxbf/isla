@@ -7,7 +7,7 @@ This guide walks you through setting up automatic artifact forwarding to your **
 ## 1. Create Your Telegram Bot
 
 1. Open Telegram and message [@BotFather](https://t.me/BotFather).
-2. Send `/newbot` and follow the instructions to choose a display name and username (e.g. `SmartIslandBuildsBot`).
+2. Send `/newbot` and follow the instructions to choose a display name and username (e.g. `IslaBuildsBot`).
 3. BotFather will provide an API Token:
    ```text
    123456789:ABCdefGhIJKlmNoPQRsTUVwxyZ

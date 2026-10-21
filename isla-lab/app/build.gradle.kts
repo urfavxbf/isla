@@ -24,7 +24,7 @@ val hasReleaseSigning = signingStoreFile.isPresent &&
     signingKeyPassword.isPresent
 
 android {
-    namespace = "com.agupta07505.smartisland"
+    namespace = "com.pao.isla.lab"
     compileSdk = 36
 
     defaultConfig {
