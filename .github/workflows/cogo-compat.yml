@@ -1,0 +1,41 @@
+name: Code on the Go toolchain compatibility
+
+on:
+  push:
+    branches: [fix/cogo-agp-toolchain]
+  pull_request:
+    paths:
+      - 'build.gradle.kts'
+      - 'gradle.properties'
+      - 'isla-lab/**'
+      - '.github/workflows/cogo-compat.yml'
+  workflow_dispatch:
+
+permissions:
+  contents: read
+
+jobs:
+  cogo-gradle-96:
+    name: Compile using Code on the Go Gradle 9.6.1
+    runs-on: ubuntu-latest
+    timeout-minutes: 45
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-java@v4
+        with:
+          distribution: temurin
+          java-version: '21'
+      - uses: android-actions/setup-android@v4
+      - name: Install Android SDK 36
+        run: sdkmanager "platforms;android-36" "build-tools;36.0.0"
+      - uses: gradle/actions/setup-gradle@v4
+        with:
+          gradle-version: '9.6.1'
+      - name: Compile full Isla app using CoGo Gradle version
+        run: gradle --no-daemon :app:assembleDebug :app:testDebugUnitTest
+      - uses: actions/upload-artifact@v4
+        if: success()
+        with:
+          name: isla-cogo-toolchain-debug
+          path: isla-lab/app/build/outputs/apk/debug/*.apk
+          if-no-files-found: error
