@@ -123,7 +123,7 @@ class IslandOverlayService : Service() {
         } else {
             dp(collapsedWidth(c, track))
         }
-        val targetHeight = dp(if (expanded && track != null) 134
+        val targetHeight = dp(if (expanded && track != null) 156
             else if (expanded) 94 else c.heightDp)
 
         // Keep the expanded card BELOW the status-bar/camera area.
