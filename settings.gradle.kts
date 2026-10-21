@@ -22,10 +22,5 @@ dependencyResolutionManagement {
 }
 
 rootProject.name = "Isla"
-
-// Main Android project is the fully redesigned Isla app.
-// The old v1.2.1 project is preserved in archive/isla-v1.2.1.
 include(":app")
-project(":app").projectDir = file("isla-lab/app")
 include(":baselineprofile")
-project(":baselineprofile").projectDir = file("isla-lab/baselineprofile")
