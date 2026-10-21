@@ -7,6 +7,10 @@
 
 package com.pao.isla.lab.ui.expanded
 
+import com.pao.isla.lab.R
+
+import androidx.compose.ui.res.stringResource
+
 import androidx.compose.foundation.background
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Box
@@ -97,11 +101,11 @@ fun IncomingCallExpanded(
     ) {
         Column(modifier = Modifier.weight(1f)) {
             IslaActivityEyebrow(
-                label = when {
-                    isRinging -> "Incoming call"
-                    notification?.isCallConnecting == true -> "Connecting"
-                    else -> "On call"
-                },
+                label = stringResource(when {
+                    isRinging -> R.string.isla_call_incoming
+                    notification?.isCallConnecting == true -> R.string.isla_call_connecting
+                    else -> R.string.isla_call_active
+                }),
                 accent = Color(settings.callColor)
             )
             Text(
