@@ -30,7 +30,7 @@ Some integrations depend on notification access, other special Android permissio
 
 ## Get a test APK from GitHub
 
-1. Open [Isla Lab build runs](https://github.com/urfavxbf/isla/actions/workflows/isla-lab-rebrand.yml).
+1. Open [Isla Lab build runs](https://github.com/urfavxbf/isla/actions/runs/39533671264).
 2. Open the latest **successful** `Rebrand Isla Lab and validate build` run.
 3. In **Artifacts**, download `Isla-fully-branded-debug` and extract the APK.
 4. Install Isla Lab, then grant only the required Android permissions in Settings.
