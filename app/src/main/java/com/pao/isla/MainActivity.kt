@@ -6,6 +6,7 @@ import android.content.Intent
 import android.net.Uri
 import android.os.Build
 import android.app.NotificationManager
+import android.service.notification.NotificationListenerService
 import android.os.Bundle
 import android.provider.Settings
 import androidx.activity.ComponentActivity
@@ -45,6 +46,13 @@ class MainActivity : ComponentActivity() {
         super.onResume()
         // Re-check permissions after returning from Android Settings.
         permissionVersion++
+        // A granted listener may remain disconnected after an APK update or process restart.
+        // Request a system rebind only when access is present and our service is not connected.
+        if (hasMusicAccess(this) && !IslaMusicListener.isConnected) {
+            NotificationListenerService.requestRebind(
+                ComponentName(this, IslaMusicListener::class.java)
+            )
+        }
     }
 
     override fun onCreate(savedInstanceState: Bundle?) {
