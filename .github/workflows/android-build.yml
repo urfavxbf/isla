@@ -22,12 +22,12 @@ jobs:
       - name: Install Android SDK 36
         run: sdkmanager "platforms;android-36" "build-tools;36.0.0"
       - uses: gradle/actions/setup-gradle@v4
-        with:
-          gradle-version: '9.6.1'
-      - name: Assemble Isla debug APK
-        run: gradle --no-daemon :app:assembleDebug
+      - name: Assemble redesigned Isla app and run JVM tests
+        run: |
+          chmod +x ./gradlew
+          ./gradlew --no-daemon :app:assembleDebug :app:testDebugUnitTest
       - uses: actions/upload-artifact@v4
         if: success()
         with:
           name: isla-debug-apk
-          path: app/build/outputs/apk/debug/*.apk
+          path: isla-lab/app/build/outputs/apk/debug/*.apk
