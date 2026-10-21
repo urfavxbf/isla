@@ -1,6 +1,10 @@
 // Match the Android toolchain bundled with Code on the Go (Gradle 9.6.1).
 // AGP 9 has built-in Kotlin; do NOT apply org.jetbrains.kotlin.android.
 buildscript {
+    repositories {
+        google()
+        mavenCentral()
+    }
     dependencies {
         // Code on the Go's injected LogSender plugin also needs AGP on the root classpath.
         classpath("org.jetbrains.kotlin:kotlin-gradle-plugin:2.3.21")
