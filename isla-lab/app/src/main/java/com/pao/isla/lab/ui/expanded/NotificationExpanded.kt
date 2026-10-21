@@ -7,6 +7,9 @@
 
 package com.pao.isla.lab.ui.expanded
 
+import com.pao.isla.lab.R
+import androidx.compose.ui.res.stringResource
+
 import android.app.ActivityOptions
 import android.app.RemoteInput
 import android.content.Intent
@@ -209,6 +212,7 @@ fun NotificationExpanded(
             // Top-anchored while a card step follows the finger: the frozen copy of the step being left is laid out
             // in the new step's (taller) slot, and centring it there would draw its text lower than the real card's.
             .wrapContentHeight(align = rememberStepAwareAlignment())
+            .islaActivityAccent(Color(settings.notificationDotColor))
             .padding(start = 18.dp, top = 20.dp, end = 18.dp, bottom = bottomPadding),
         verticalArrangement = Arrangement.spacedBy(14.dp)
     ) {
@@ -272,6 +276,10 @@ fun NotificationExpanded(
                         } else Modifier
                     )
             ) {
+                IslaActivityEyebrow(
+                    label = notification?.appName?.takeIf { it.isNotBlank() } ?: stringResource(R.string.isla_card_notification),
+                    accent = Color(settings.notificationDotColor)
+                )
                 Text(
                     text = notification?.title?.takeIf { it.isNotBlank() } ?: notification?.appName ?: "Notification",
                     color = LocalIslandPalette.current.text,

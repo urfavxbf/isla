@@ -510,41 +510,55 @@ fun IslaHomeScreen(
                                 selected = orientationTab,
                                 onSelected = { orientationTab = it }
                             )
-                            run {
-                                if (orientationTab == OrientationTab.Landscape) {
-                                    LandscapeSection(
-                                        settings = settings,
-                                        repository = resolvedRepository
-                                    )
-                                } else {
-                                    PositionsSection(
+                            IslaOverlayStudio(
+                                settings = settings,
+                                repository = resolvedRepository,
+                                landscape = orientationTab == OrientationTab.Landscape
+                            )
+                            CollapsibleCard(
+                                title = "Advanced layout",
+                                stateKey = "isla_overlay_advanced",
+                                summary = "Precise dimensions, cutout detection, shadow, motion and idle behavior",
+                                icon = Icons.Rounded.Tune,
+                                searchKeyPrefix = "layout.",
+                                initiallyExpanded = false
+                            ) {
+                                Column(verticalArrangement = Arrangement.spacedBy(14.dp)) {
+                                    if (orientationTab == OrientationTab.Landscape) {
+                                        LandscapeSection(
+                                            settings = settings,
+                                            repository = resolvedRepository
+                                        )
+                                    } else {
+                                        PositionsSection(
+                                            settings = settings,
+                                            repository = resolvedRepository,
+                                            onNavigateToBackup = {
+                                                transitionDirection = 1
+                                                activeDetailSection = FeatureDetailSection.BackupRestore
+                                            }
+                                        )
+                                    }
+                                    AnimationSpeedSection(
                                         settings = settings,
                                         repository = resolvedRepository,
-                                        onNavigateToBackup = {
+                                        landscape = orientationTab == OrientationTab.Landscape
+                                    )
+                                    MergeStyleSection(
+                                        settings = settings,
+                                        repository = resolvedRepository,
+                                        landscape = orientationTab == OrientationTab.Landscape
+                                    )
+                                    IdleWidgetsSection(
+                                        settings = settings,
+                                        repository = resolvedRepository,
+                                        onOpenSettings = {
                                             transitionDirection = 1
-                                            activeDetailSection = FeatureDetailSection.BackupRestore
+                                            activeDetailSection = FeatureDetailSection.IdleWidgets
                                         }
                                     )
                                 }
                             }
-                            AnimationSpeedSection(
-                                settings = settings,
-                                repository = resolvedRepository,
-                                landscape = orientationTab == OrientationTab.Landscape
-                            )
-                            MergeStyleSection(
-                                settings = settings,
-                                repository = resolvedRepository,
-                                landscape = orientationTab == OrientationTab.Landscape
-                            )
-                            IdleWidgetsSection(
-                                settings = settings,
-                                repository = resolvedRepository,
-                                onOpenSettings = {
-                                    transitionDirection = 1
-                                    activeDetailSection = FeatureDetailSection.IdleWidgets
-                                }
-                            )
                         }
 
                         StudioTab.Features -> {

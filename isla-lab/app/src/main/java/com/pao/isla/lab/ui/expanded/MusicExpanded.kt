@@ -236,6 +236,7 @@ fun MusicExpanded(
                         Modifier.graphicsLayer { alpha = foregroundAlpha().coerceIn(0f, 1f) }
                     } else Modifier
                 )
+                .islaActivityAccent(Color(settings.musicVisualizerColor))
                 .padding(start = 16.dp, top = 16.dp, end = 16.dp, bottom = bottomPadding)
         ) {
             Row(
@@ -271,6 +272,11 @@ fun MusicExpanded(
                 verticalAlignment = Alignment.CenterVertically
             ) {
                 Column(Modifier.weight(1f)) {
+                    IslaActivityEyebrow(
+                        label = stringResource(if (localIsPlaying) R.string.isla_media_playing else R.string.isla_media_paused),
+                        accent = Color(settings.musicVisualizerColor)
+                    )
+                    Spacer(Modifier.height(5.dp))
                     Text(
                         notification?.title?.takeIf { it.isNotBlank() } ?: "Song",
                         color = palette.text,
