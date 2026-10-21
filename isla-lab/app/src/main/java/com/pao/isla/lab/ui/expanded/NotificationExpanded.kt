@@ -209,6 +209,7 @@ fun NotificationExpanded(
             // Top-anchored while a card step follows the finger: the frozen copy of the step being left is laid out
             // in the new step's (taller) slot, and centring it there would draw its text lower than the real card's.
             .wrapContentHeight(align = rememberStepAwareAlignment())
+            .islaActivityAccent(Color(settings.notificationDotColor))
             .padding(start = 18.dp, top = 20.dp, end = 18.dp, bottom = bottomPadding),
         verticalArrangement = Arrangement.spacedBy(14.dp)
     ) {
