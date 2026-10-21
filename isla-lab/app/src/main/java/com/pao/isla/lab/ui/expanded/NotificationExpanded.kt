@@ -274,7 +274,7 @@ fun NotificationExpanded(
                     )
             ) {
                 IslaActivityEyebrow(
-                    label = notification?.appName?.takeIf { it.isNotBlank() } ?: "Notification",
+                    label = notification?.appName?.takeIf { it.isNotBlank() } ?: stringResource(R.string.isla_card_notification),
                     accent = Color(settings.notificationDotColor)
                 )
                 Text(
