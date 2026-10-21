@@ -272,6 +272,10 @@ fun NotificationExpanded(
                         } else Modifier
                     )
             ) {
+                IslaActivityEyebrow(
+                    label = notification?.appName?.takeIf { it.isNotBlank() } ?: "Notification",
+                    accent = Color(settings.notificationDotColor)
+                )
                 Text(
                     text = notification?.title?.takeIf { it.isNotBlank() } ?: notification?.appName ?: "Notification",
                     color = LocalIslandPalette.current.text,
