@@ -28,10 +28,10 @@ class SettingsSearchIndexTest {
     }
 
     @Test
-    fun everyEventOnTheHomeGridCanBeFound() {
+    fun everyEventOnTheFeaturesGridCanBeFound() {
         IslandEvent.entries.forEach { event ->
             val entry = index.single { it.item.id == "event.${event.id}" }
-            assertEquals(SearchTarget.Tab(StudioTab.Studio), entry.target)
+            assertEquals(SearchTarget.Tab(StudioTab.Features), entry.target)
             assertEquals(eventSearchKey(event), entry.rowKey)
             assertTrue(entry.item.keywords.contains(event.shortLabel))
         }
