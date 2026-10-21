@@ -63,7 +63,7 @@ internal data class SettingsSearchEntry(
  * @param str resolves a string resource id; the app passes `context::getString`, tests pass a stub.
  */
 internal fun buildSettingsSearchIndex(str: (Int) -> String): List<SettingsSearchEntry> {
-    val home = str(R.string.tab_studio)
+    val home = str(R.string.isla_nav_features)
     val layout = str(R.string.tab_position)
     val settingsTab = str(R.string.tab_settings)
 
@@ -105,7 +105,7 @@ internal fun buildSettingsSearchIndex(str: (Int) -> String): List<SettingsSearch
         add(
             id = "event.${event.id}",
             title = event.label,
-            target = SearchTarget.Tab(StudioTab.Studio),
+            target = SearchTarget.Tab(StudioTab.Features),
             screen = home,
             icon = iconFor(event),
             keywords = listOf(event.shortLabel, event.group, "event", "switch", "toggle", "show"),
