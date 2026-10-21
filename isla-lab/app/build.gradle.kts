@@ -31,8 +31,8 @@ android {
         applicationId = "com.pao.isla.lab"
         minSdk = 26
         targetSdk = 36
-        versionCode = 9
-        versionName = "7.6.0"
+        versionCode = 1
+        versionName = "0.1.0-lab"
     }
 
     buildFeatures {
