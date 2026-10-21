@@ -33,6 +33,13 @@ kotlin {
     }
 }
 
+// AndroidX Activity/Compose may pull in ProfileInstaller only for baseline-profile
+// startup optimization. Isla does not ship a baseline profile; that optional AAR
+// is absent from some Code on the Go offline Maven bundles.
+configurations.configureEach {
+    exclude(group = "androidx.profileinstaller", module = "profileinstaller")
+}
+
 dependencies {
     // Prefer the AndroidX versions shipped in Code on the Go's harvested Maven repository.
     implementation(platform("androidx.compose:compose-bom:2024.02.00"))
