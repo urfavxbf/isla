@@ -17,6 +17,12 @@ import android.service.notification.NotificationListenerService
 class IslaMusicListener : NotificationListenerService() {
     private var manager: MediaSessionManager? = null
     private var connected = false
+
+    companion object {
+        @Volatile
+        var isConnected: Boolean = false
+            private set
+    }
     private val handler = Handler(Looper.getMainLooper())
     private val callbacks = mutableMapOf<MediaController, MediaController.Callback>()
     private var sessions: List<MediaController> = emptyList()
@@ -29,6 +35,7 @@ class IslaMusicListener : NotificationListenerService() {
         super.onListenerConnected()
         if (connected) return
         connected = true
+        isConnected = true
         manager = getSystemService(Context.MEDIA_SESSION_SERVICE) as MediaSessionManager
         val component = ComponentName(this, IslaMusicListener::class.java)
         try {
@@ -52,6 +59,7 @@ class IslaMusicListener : NotificationListenerService() {
     private fun shutdown() {
         if (!connected) return
         connected = false
+        isConnected = false
         manager?.removeOnActiveSessionsChangedListener(sessionsChanged)
         manager = null
         clearSessions()
