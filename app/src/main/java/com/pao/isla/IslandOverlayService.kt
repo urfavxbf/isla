@@ -182,7 +182,13 @@ class IslandOverlayService : Service() {
             }
             layoutParams = LinearLayout.LayoutParams(dp(32), dp(30))
         })
-        root.addView(header)
+        root.addView(
+            header,
+            LinearLayout.LayoutParams(
+                LinearLayout.LayoutParams.MATCH_PARENT,
+                LinearLayout.LayoutParams.WRAP_CONTENT
+            )
+        )
 
         root.addView(text(
             track?.artist?.ifBlank { track.packageName } ?: "Tap to minimize",
