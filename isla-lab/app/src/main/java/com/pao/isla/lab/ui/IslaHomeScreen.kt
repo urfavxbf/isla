@@ -183,6 +183,8 @@ import androidx.compose.runtime.setValue
 internal enum class StudioTab {
     Studio,
     Position,
+    Features,
+    Style,
     Demo,
     Settings
 }
@@ -390,10 +392,14 @@ fun IslaHomeScreen(
         }
     }
 
-    BackHandler(enabled = activeDetailSection != null) {
+    BackHandler(enabled = activeDetailSection != null || selectedTab == StudioTab.Demo) {
         transitionDirection = -1
-        // The weather page is opened from the Idle widgets page, so back goes there; every other page goes home.
-        activeDetailSection = if (activeDetailSection in IDLE_SETTINGS_PAGES) FeatureDetailSection.IdleWidgets else null
+        if (activeDetailSection == null) {
+            selectedTab = StudioTab.Features
+        } else {
+            // Idle subpages return to their parent; all other detail pages return to their tab.
+            activeDetailSection = if (activeDetailSection in IDLE_SETTINGS_PAGES) FeatureDetailSection.IdleWidgets else null
+        }
     }
 
     CompositionLocalProvider(LocalSearchFocus provides searchFocus) {
@@ -401,7 +407,7 @@ fun IslaHomeScreen(
         contentWindowInsets = WindowInsets(0, 0, 0, 0),
         bottomBar = {
             if (activeDetailSection == null) {
-                StudioBottomNavigationBar(
+                IslaBottomNav(
                     selectedTab = selectedTab,
                     onTabSelected = { tab ->
                         transitionDirection = if (tab.ordinal > selectedTab.ordinal) 1 else -1
@@ -454,6 +460,19 @@ fun IslaHomeScreen(
 
                     when (selectedTab) {
                         StudioTab.Studio -> {
+                            IslaPageIntro(
+                                eyebrow = "CONTROL CENTER",
+                                title = "Make every moment visible",
+                                subtitle = "Your personal island for the moments that matter."
+                            )
+                            IslaHubHero(
+                                enabled = settings.enabled,
+                                hasPermissions = canEnable,
+                                onPermissionClick = {
+                                    transitionDirection = 1
+                                    activeDetailSection = FeatureDetailSection.PermissionsCenter
+                                }
+                            )
                             MasterPowerCard(
                                 enabled = settings.enabled,
                                 canEnable = canEnable,
@@ -461,9 +480,7 @@ fun IslaHomeScreen(
                                 notificationGranted = notificationGranted,
                                 batteryIgnored = batteryIgnored,
                                 onCheckedChange = { turnOn ->
-                                    if (turnOn) {
-                                        SystemServiceRecovery.requestRecovery(context)
-                                    }
+                                    if (turnOn) SystemServiceRecovery.requestRecovery(context)
                                     scope.launch { resolvedRepository.setEnabled(turnOn) }
                                 },
                                 onSetupPermissionsClick = {
@@ -471,24 +488,24 @@ fun IslaHomeScreen(
                                     activeDetailSection = FeatureDetailSection.PermissionsCenter
                                 }
                             )
-
-                            // Portrait / Landscape switch, then event toggles for that profile
-                            OrientationTabs(
-                                selected = orientationTab,
-                                onSelected = { orientationTab = it }
-                            )
-                            EventTogglesSection(
-                                settings = settings,
-                                repository = resolvedRepository,
-                                landscape = orientationTab == OrientationTab.Landscape,
-                                onOpenFaceIdSettings = {
+                            IslaHomeShortcuts(
+                                onTabClick = { tab ->
+                                    transitionDirection = if (tab.ordinal > selectedTab.ordinal) 1 else -1
+                                    selectedTab = tab
+                                },
+                                onNotificationsClick = {
                                     transitionDirection = 1
-                                    activeDetailSection = FeatureDetailSection.FaceIdSettings
+                                    activeDetailSection = FeatureDetailSection.NotificationRules
                                 }
                             )
                         }
 
                         StudioTab.Position -> {
+                            IslaPageIntro(
+                                eyebrow = "OVERLAY STUDIO",
+                                title = "Shape your island",
+                                subtitle = "Tune its position, size and motion for your phone."
+                            )
                             OrientationTabs(
                                 selected = orientationTab,
                                 onSelected = { orientationTab = it }
@@ -530,7 +547,151 @@ fun IslaHomeScreen(
                             )
                         }
 
+                        StudioTab.Features -> {
+                            IslaPageIntro(
+                                eyebrow = "LIVE ACTIVITIES",
+                                title = "Choose what appears",
+                                subtitle = "Every existing feature remains available, with independent controls."
+                            )
+                            OrientationTabs(
+                                selected = orientationTab,
+                                onSelected = { orientationTab = it }
+                            )
+                            EventTogglesSection(
+                                settings = settings,
+                                repository = resolvedRepository,
+                                landscape = orientationTab == OrientationTab.Landscape,
+                                onOpenFaceIdSettings = {
+                                    transitionDirection = 1
+                                    activeDetailSection = FeatureDetailSection.FaceIdSettings
+                                }
+                            )
+                            IslaSectionJump(
+                                title = "Preview activities",
+                                subtitle = "Test media, notifications, charging and calls",
+                                icon = Icons.Rounded.Science,
+                                onClick = {
+                                    transitionDirection = 1
+                                    selectedTab = StudioTab.Demo
+                                }
+                            )
+                            IslaSectionJump(
+                                title = "Notification rules",
+                                subtitle = "App visibility, actions and sensitive previews",
+                                icon = Icons.Rounded.Notifications,
+                                onClick = {
+                                    transitionDirection = 1
+                                    activeDetailSection = FeatureDetailSection.NotificationRules
+                                }
+                            )
+                            IslaSectionJump(
+                                title = "Idle widgets",
+                                subtitle = "Clock, weather, calendar and network activity",
+                                icon = Icons.Rounded.Widgets,
+                                onClick = {
+                                    transitionDirection = 1
+                                    activeDetailSection = FeatureDetailSection.IdleWidgets
+                                }
+                            )
+                            IslaSectionJump(
+                                title = "Gestures and shortcuts",
+                                subtitle = "Control swipe actions, haptics and launching apps",
+                                icon = Icons.Rounded.Gesture,
+                                onClick = {
+                                    transitionDirection = 1
+                                    activeDetailSection = FeatureDetailSection.GesturesGuide
+                                }
+                            )
+                        }
+
+                        StudioTab.Style -> {
+                            IslaPageIntro(
+                                eyebrow = "VISUAL LANGUAGE",
+                                title = "Distinctly Isla",
+                                subtitle = "Choose the personality of your dashboard and floating island."
+                            )
+                            ThemeModeSelector(
+                                selected = settings.themeMode,
+                                onSelected = { mode ->
+                                    scope.launch { resolvedRepository.setThemeMode(mode) }
+                                }
+                            )
+                            com.pao.isla.lab.ui.sections.AppThemeOptions(
+                                settings = settings,
+                                onLiquidGlassChange = { enabled ->
+                                    scope.launch { resolvedRepository.setLiquidGlassTheme(enabled) }
+                                },
+                                onMaterialYouChange = { enabled ->
+                                    scope.launch { resolvedRepository.setMaterialYou(enabled) }
+                                },
+                                onAccentChange = { accent ->
+                                    scope.launch { resolvedRepository.setAccentColor(accent) }
+                                }
+                            )
+                            IslaSectionJump(
+                                title = "Island appearance",
+                                subtitle = "Color, opacity, gradients and individual activity styles",
+                                icon = Icons.Rounded.Palette,
+                                onClick = {
+                                    transitionDirection = 1
+                                    activeDetailSection = FeatureDetailSection.ColorStudio
+                                }
+                            )
+                            CollapsibleCard(
+                                title = "Fonts and typography",
+                                stateKey = "isla_style_fonts",
+                                summary = "Font family and mixed weights",
+                                icon = Icons.Rounded.FontDownload,
+                                initiallyExpanded = false
+                            ) {
+                                Column(verticalArrangement = Arrangement.spacedBy(8.dp)) {
+                                    IslandFontPicker(
+                                        selected = settings.islandFont,
+                                        onSelected = { font ->
+                                            scope.launch { resolvedRepository.setIslandFont(font) }
+                                        }
+                                    )
+                                    com.pao.isla.lab.ui.sections.IslandFontMixSection(
+                                        settings = settings,
+                                        onChange = { enabled, light, regular, medium ->
+                                            scope.launch {
+                                                resolvedRepository.setFontMix(enabled, light, regular, medium)
+                                            }
+                                        }
+                                    )
+                                }
+                            }
+                            OrientationTabs(
+                                selected = orientationTab,
+                                onSelected = { orientationTab = it }
+                            )
+                            AnimationSpeedSection(
+                                settings = settings,
+                                repository = resolvedRepository,
+                                landscape = orientationTab == OrientationTab.Landscape
+                            )
+                            MergeStyleSection(
+                                settings = settings,
+                                repository = resolvedRepository,
+                                landscape = orientationTab == OrientationTab.Landscape
+                            )
+                        }
+
                         StudioTab.Demo -> {
+                            IslaPageIntro(
+                                eyebrow = "FEATURE PLAYGROUND",
+                                title = "See Isla in action",
+                                subtitle = "Test activity cards without leaving the app."
+                            )
+                            IslaSectionJump(
+                                title = "Back to features",
+                                subtitle = "Return to activity toggles",
+                                icon = Icons.Rounded.Apps,
+                                onClick = {
+                                    transitionDirection = -1
+                                    selectedTab = StudioTab.Features
+                                }
+                            )
                             DemoSection(
                                 settings = settings,
                                 notificationRepository = resolvedNotificationRepository
@@ -538,6 +699,11 @@ fun IslaHomeScreen(
                         }
 
                         StudioTab.Settings -> {
+                            IslaPageIntro(
+                                eyebrow = "SYSTEM & SUPPORT",
+                                title = "Everything under control",
+                                subtitle = "Permissions, app policies, backup, diagnostics and legal information."
+                            )
                             SettingsOverviewSection(
                                 settings = settings,
                                 searchQuery = searchQuery,
@@ -677,7 +843,7 @@ private fun StudioTopHeader(
                         ),
                     contentAlignment = Alignment.Center
                 ) {
-                    Text("SI", color = Color.White, fontWeight = FontWeight.Bold, fontSize = 16.sp)
+                    Text("IS", color = Color.White, fontWeight = FontWeight.Bold, fontSize = 16.sp)
                 }
             }
             Column {

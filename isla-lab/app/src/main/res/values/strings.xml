@@ -6,6 +6,12 @@
   Do not remove or alter this notice. - Per GPL-3.0 Section 4 & Section 5
 -->
 <resources>
+    <!-- Isla's new five-destination control center; Android falls back to these for untranslated locales. -->
+    <string name="isla_nav_home">Home</string>
+    <string name="isla_nav_overlay">Overlay</string>
+    <string name="isla_nav_features">Features</string>
+    <string name="isla_nav_style">Style</string>
+    <string name="isla_nav_system">System</string>
     <string name="app_name">Isla Lab</string>
     <string name="app_subtitle">Floating Dynamic Overlay</string>
     <string name="app_description">Isla Lab reimagines Android notifications with a beautiful floating experience, interactive controls, and fluid animations—keeping everything important just a glance away.</string>

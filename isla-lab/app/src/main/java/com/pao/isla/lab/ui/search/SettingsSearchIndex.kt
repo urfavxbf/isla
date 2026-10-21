@@ -63,7 +63,7 @@ internal data class SettingsSearchEntry(
  * @param str resolves a string resource id; the app passes `context::getString`, tests pass a stub.
  */
 internal fun buildSettingsSearchIndex(str: (Int) -> String): List<SettingsSearchEntry> {
-    val home = str(R.string.tab_studio)
+    val home = str(R.string.isla_nav_features)
     val layout = str(R.string.tab_position)
     val settingsTab = str(R.string.tab_settings)
 
@@ -101,11 +101,19 @@ internal fun buildSettingsSearchIndex(str: (Int) -> String): List<SettingsSearch
 
     fun detail(section: FeatureDetailSection) = SearchTarget.Detail(section)
 
+    // Top-level navigation is searchable even if its screen contains no anchored setting rows.
+    add("navigation.home", str(R.string.isla_nav_home), SearchTarget.Tab(StudioTab.Studio),
+        str(R.string.isla_nav_home), Icons.Rounded.FlashOn,
+        keywords = listOf("dashboard", "control center", "start", "status"))
+    add("navigation.style", str(R.string.isla_nav_style), SearchTarget.Tab(StudioTab.Style),
+        str(R.string.isla_nav_style), Icons.Rounded.Palette,
+        keywords = listOf("theme", "appearance", "color", "accent", "glass", "font"))
+
     IslandEvent.entries.forEach { event ->
         add(
             id = "event.${event.id}",
             title = event.label,
-            target = SearchTarget.Tab(StudioTab.Studio),
+            target = SearchTarget.Tab(StudioTab.Features),
             screen = home,
             icon = iconFor(event),
             keywords = listOf(event.shortLabel, event.group, "event", "switch", "toggle", "show"),
