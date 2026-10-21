@@ -11,7 +11,9 @@ buildscript {
         mavenCentral()
     }
     dependencies {
-        classpath("com.android.tools.build:gradle:9.1.1")
+        // CoGo 26.38+ bundles AGP 9.3.1 with Gradle 9.6.1 in its local Maven repository.
+        // Using an older AGP can pull Guava/Gradle dependencies missing on device.
+        classpath("com.android.tools.build:gradle:9.3.1")
         classpath("org.jetbrains.kotlin:kotlin-gradle-plugin:2.3.21")
         classpath("org.jetbrains.kotlin:compose-compiler-gradle-plugin:2.3.21")
         classpath("com.google.dagger:hilt-android-gradle-plugin:2.60.1")
