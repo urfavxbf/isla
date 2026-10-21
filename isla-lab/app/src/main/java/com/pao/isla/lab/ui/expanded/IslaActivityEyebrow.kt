@@ -7,6 +7,7 @@ import androidx.compose.foundation.layout.heightIn
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.size
 import androidx.compose.foundation.shape.CircleShape
+import androidx.compose.ui.draw.drawBehind
 import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
@@ -57,4 +58,21 @@ internal fun IslaActivityEyebrow(
             lineHeight = 11.sp
         )
     }
+}
+
+/**
+ * Small brand stripe on an expanded card. Decoration only, rendered behind the
+ * existing content without adding layout height or an interactive touch target.
+ */
+internal fun Modifier.islaActivityAccent(accent: Color): Modifier = drawBehind {
+    val markerW = 34.dp.toPx()
+    val markerH = 3.dp.toPx()
+    val top = 8.dp.toPx()
+    val start = 18.dp.toPx()
+    drawRoundRect(
+        color = accent.copy(alpha = 0.72f),
+        topLeft = androidx.compose.ui.geometry.Offset(start, top),
+        size = androidx.compose.ui.geometry.Size(markerW, markerH),
+        cornerRadius = androidx.compose.ui.geometry.CornerRadius(markerH / 2f)
+    )
 }
