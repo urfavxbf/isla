@@ -14,11 +14,6 @@ import androidx.compose.foundation.rememberScrollState
 import androidx.compose.foundation.shape.CircleShape
 import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.foundation.verticalScroll
-import androidx.compose.material.icons.Icons
-import androidx.compose.material.icons.rounded.CheckCircle
-import androidx.compose.material.icons.rounded.Palette
-import androidx.compose.material.icons.rounded.PlayArrow
-import androidx.compose.material.icons.rounded.Stop
 import androidx.compose.material3.*
 import androidx.compose.runtime.*
 import androidx.compose.ui.Alignment
@@ -72,7 +67,7 @@ private fun IslaScreen(version: Int, grant: () -> Unit, start: () -> Unit, stop:
         Column(Modifier.fillMaxSize().verticalScroll(rememberScrollState()).padding(20.dp), verticalArrangement = Arrangement.spacedBy(18.dp)) {
             Row(verticalAlignment = Alignment.CenterVertically) {
                 Surface(color = Color(0xFF252039), shape = RoundedCornerShape(18.dp)) {
-                    Icon(Icons.Rounded.Palette, null, Modifier.padding(13.dp), tint = Accent)
+                    Text("◉", modifier = Modifier.padding(13.dp), color = Accent, fontSize = 22.sp)
                 }
                 Spacer(Modifier.width(14.dp))
                 Column {
@@ -106,8 +101,8 @@ private fun IslaScreen(version: Int, grant: () -> Unit, start: () -> Unit, stop:
                     Text("Accent color", style = MaterialTheme.typography.labelLarge)
                     Row(horizontalArrangement = Arrangement.spacedBy(12.dp)) {
                         listOf(0xFF8B5CF6, 0xFF38BDF8, 0xFF34D399, 0xFFFB7185, 0xFFFBBF24).forEach { value ->
-                            Box(Modifier.size(38.dp).background(Color(value), CircleShape).clickable { update(c.copy(accentHex = value)) }, contentAlignment = Alignment.Center) {
-                                if (c.accentHex == value) Icon(Icons.Rounded.CheckCircle, null, tint = Color.Black)
+                            Box(Modifier.size(38.dp).background(Color(value.toInt()), CircleShape).clickable { update(c.copy(accentHex = value)) }, contentAlignment = Alignment.Center) {
+                                if (c.accentHex == value) Text("✓", color = Color.Black, fontWeight = FontWeight.Bold)
                             }
                         }
                     }
@@ -119,8 +114,8 @@ private fun IslaScreen(version: Int, grant: () -> Unit, start: () -> Unit, stop:
                     Text(if (permitted) "Overlay permission is enabled." else "Allow Isla to display over other apps to use the floating island.", color = Muted)
                     if (!permitted) Button(onClick = grant, modifier = Modifier.fillMaxWidth()) { Text("Grant overlay permission") }
                     else Row(horizontalArrangement = Arrangement.spacedBy(10.dp)) {
-                        Button(onClick = start, modifier = Modifier.weight(1f)) { Icon(Icons.Rounded.PlayArrow, null); Spacer(Modifier.width(6.dp)); Text("Start") }
-                        OutlinedButton(onClick = stop, modifier = Modifier.weight(1f)) { Icon(Icons.Rounded.Stop, null); Spacer(Modifier.width(6.dp)); Text("Stop") }
+                        Button(onClick = start, modifier = Modifier.weight(1f)) { Text("▶"); Spacer(Modifier.width(6.dp)); Text("Start") }
+                        OutlinedButton(onClick = stop, modifier = Modifier.weight(1f)) { Text("■"); Spacer(Modifier.width(6.dp)); Text("Stop") }
                     }
                     OutlinedButton(onClick = { context.startActivity(Intent(Settings.ACTION_MANAGE_OVERLAY_PERMISSION, Uri.parse("package:${context.packageName}"))) }, modifier = Modifier.fillMaxWidth()) { Text("Open overlay settings") }
                 }
