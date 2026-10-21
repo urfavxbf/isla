@@ -14,6 +14,7 @@
     <string name="isla_call_active">On call</string>
     <string name="isla_card_notification">Notification</string>
     <string name="isla_card_power">Power</string>
+    <string name="isla_card_navigation">Navigation</string>
     <!-- Isla's new five-destination control center; Android falls back to these for untranslated locales. -->
     <string name="isla_nav_home">Home</string>
     <string name="isla_nav_overlay">Overlay</string>
