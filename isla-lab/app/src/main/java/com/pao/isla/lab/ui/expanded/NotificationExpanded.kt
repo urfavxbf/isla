@@ -7,6 +7,9 @@
 
 package com.pao.isla.lab.ui.expanded
 
+import com.pao.isla.lab.R
+import androidx.compose.ui.res.stringResource
+
 import android.app.ActivityOptions
 import android.app.RemoteInput
 import android.content.Intent
