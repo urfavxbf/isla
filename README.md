@@ -9,6 +9,10 @@ A Kotlin + Jetpack Compose Android app with a customizable floating Dynamic Isla
 - Start/stop floating island
 - Adjustable width, height, corner radius, transparency and accent color
 - Preferences stored locally
+- Circular punch-hole preset (36dp) and width as small as 28dp
+- Screen-top position adjustment for different camera cutouts
+- **v1.2:** Opt-in media-session detection, track title/artist, Play/Pause and Skip controls
+- Optionally expand the island while a song is playing
 
 ## Build on an Android phone with Code on the Go
 
@@ -37,4 +41,16 @@ CoGo's [official toolchain migration guide](https://github.com/appdevforall/Code
 ## Minimum device
 
 Android 8.0 (API 26) or newer. The floating island requires Android's
-**Display over other apps** permission. Media-session, phone-call and notification integrations have not yet been implemented.
+**Display over other apps** permission.
+
+## Music controls (v1.2)
+
+1. Open Isla and tap **Enable music access** in the **Now playing** section.
+2. On Android's notification access page, turn on **Isla music controls** and confirm.
+3. Return to Isla, press **Start**, then play a song in an app that publishes a standard Android media session.
+4. The island shows the current track. Tap it to expand the controls, or tap **×** to minimize.
+5. You can turn **Show music on island** and **Expand while playing** on/off independently.
+
+**Privacy:** Android's notification-listener permission is broader than media playback. Isla's listener only reads active media sessions. It ignores other notifications and never stores or uploads their content. The feature is disabled until the user explicitly grants access.
+
+**Compatibility:** Apps must publish active media sessions with supported transport actions for their playback controls to work; device-specific battery restrictions and overlay behavior may affect operation. Calls and non-media notifications are not implemented yet.

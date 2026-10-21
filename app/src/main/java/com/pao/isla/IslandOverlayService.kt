@@ -5,18 +5,29 @@ import android.content.Context
 import android.content.Intent
 import android.graphics.Color as AndroidColor
 import android.graphics.PixelFormat
+import android.graphics.Typeface
 import android.graphics.drawable.GradientDrawable
 import android.os.Build
 import android.os.IBinder
 import android.provider.Settings
+import android.text.TextUtils
 import android.view.Gravity
 import android.view.WindowManager
+import android.widget.LinearLayout
 import android.widget.TextView
 
+/**
+ * The small pill remains configurable around circular camera cutouts.
+ * Music information is shown only when the user explicitly enables notification access.
+ */
 class IslandOverlayService : Service() {
     private lateinit var wm: WindowManager
-    private var island: TextView? = null
+    private var island: LinearLayout? = null
     private var expanded = false
+
+    private val musicObserver: (TrackInfo?) -> Unit = {
+        if (island != null) renderIsland()
+    }
 
     override fun onCreate() {
         super.onCreate()
@@ -30,61 +41,36 @@ class IslandOverlayService : Service() {
                 stopSelf()
             }
             ACTION_UPDATE -> {
-                // Editing settings must not turn the island back on if it was stopped.
-                if (island != null) {
+                // Settings changes must not start an overlay the user stopped.
+                if (island != null && Settings.canDrawOverlays(this)) {
                     removeIsland()
-                    if (Settings.canDrawOverlays(this)) showIsland()
-                } else {
-                    stopSelf()
+                    showIsland()
                 }
             }
-            else -> if (Settings.canDrawOverlays(this)) showIsland() else stopSelf()
+            else -> {
+                if (Settings.canDrawOverlays(this)) showIsland()
+                else stopSelf()
+            }
         }
         return START_NOT_STICKY
     }
 
     private fun showIsland() {
         if (island != null) return
-        val c = IslandConfig.load(this)
         expanded = false
-
-        val view = TextView(this).apply {
-            text = collapsedLabel(c)
-            setTextColor(AndroidColor.WHITE)
-            textSize = 11f
+        val c = IslandConfig.load(this)
+        val root = LinearLayout(this).apply {
+            orientation = LinearLayout.VERTICAL
             gravity = Gravity.CENTER
-            alpha = c.transparency
-            background = GradientDrawable().apply {
-                shape = GradientDrawable.RECTANGLE
-                setColor(AndroidColor.BLACK)
-                cornerRadius = dp(c.radiusDp).toFloat()
-                setStroke(dp(1).coerceAtLeast(1), c.accentHex.toInt())
-            }
-            // A 28-48dp island needs minimal padding so the pill can stay circular.
-            setPadding(if (c.isCompact) dp(2) else dp(12), 0,
-                if (c.isCompact) dp(2) else dp(12), 0)
             elevation = dp(10).toFloat()
-            contentDescription = "Isla floating island. Tap to expand or collapse."
-            setOnClickListener {
-                expanded = !expanded
-                text = if (expanded) "●   Isla is active   •   Tap to close" else collapsedLabel(c)
-                setPadding(if (expanded) dp(12) else if (c.isCompact) dp(2) else dp(12),
-                    0, if (expanded) dp(12) else if (c.isCompact) dp(2) else dp(12), 0)
-                (layoutParams as? WindowManager.LayoutParams)?.let { p ->
-                    p.width = dp(if (expanded) c.widthDp.coerceAtLeast(240) else c.widthDp)
-                    p.height = dp(if (expanded) (c.heightDp + 24).coerceIn(56, 90) else c.heightDp)
-                    try {
-                        wm.updateViewLayout(this, p)
-                    } catch (_: IllegalArgumentException) {
-                        // View may have been removed while settings changed.
-                    }
-                }
-            }
+            contentDescription = "Isla Dynamic Island, tap to expand"
+            isClickable = true
+            isFocusable = true
+            setOnClickListener { expanded = !expanded; renderIsland() }
         }
 
         val params = WindowManager.LayoutParams(
-            dp(c.widthDp),
-            dp(c.heightDp),
+            dp(c.widthDp), dp(c.heightDp),
             WindowManager.LayoutParams.TYPE_APPLICATION_OVERLAY,
             WindowManager.LayoutParams.FLAG_NOT_FOCUSABLE or
                 WindowManager.LayoutParams.FLAG_LAYOUT_IN_SCREEN or
@@ -92,8 +78,6 @@ class IslandOverlayService : Service() {
             PixelFormat.TRANSLUCENT
         ).apply {
             gravity = Gravity.TOP or Gravity.CENTER_HORIZONTAL
-            // Use the physical screen top instead of the old +8dp offset.
-            // Negative positions can help on OEMs that inset application overlays.
             y = dp(c.positionYDp)
             if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.R) {
                 layoutInDisplayCutoutMode = WindowManager.LayoutParams.LAYOUT_IN_DISPLAY_CUTOUT_MODE_ALWAYS
@@ -101,9 +85,12 @@ class IslandOverlayService : Service() {
                 layoutInDisplayCutoutMode = WindowManager.LayoutParams.LAYOUT_IN_DISPLAY_CUTOUT_MODE_SHORT_EDGES
             }
         }
+
         try {
-            wm.addView(view, params)
-            island = view
+            wm.addView(root, params)
+            island = root
+            MusicState.observe(musicObserver)
+            renderIsland()
         } catch (_: SecurityException) {
             island = null
         } catch (_: WindowManager.BadTokenException) {
@@ -111,25 +98,179 @@ class IslandOverlayService : Service() {
         }
     }
 
-    private fun collapsedLabel(config: IslandConfig): String = when {
-        config.isHoleSize -> "" // A clean circular mask around the camera punch-hole.
-        config.isCompact -> "●"
-        else -> "●     Isla     ●"
+    private fun renderIsland() {
+        val root = island ?: return
+        val c = IslandConfig.load(this)
+        val track = MusicState.track.takeIf { c.showMedia }
+        val playing = track?.isPlaying == true
+        val autoMusicPill = playing && c.expandOnPlay && !expanded
+
+        val width = when {
+            expanded -> c.widthDp.coerceAtLeast(288)
+            autoMusicPill -> c.widthDp.coerceAtLeast(160)
+            else -> c.widthDp
+        }
+        val height = when {
+            expanded && track != null -> 116
+            expanded -> 74
+            else -> c.heightDp
+        }
+
+        root.alpha = c.transparency
+        root.background = GradientDrawable().apply {
+            shape = GradientDrawable.RECTANGLE
+            setColor(AndroidColor.BLACK)
+            cornerRadius = dp(if (expanded) 26 else c.radiusDp).toFloat()
+            setStroke(dp(1).coerceAtLeast(1), c.accentHex.toInt())
+        }
+        root.removeAllViews()
+        root.setPadding(dp(if (expanded) 12 else 4), 0, dp(if (expanded) 12 else 4), 0)
+
+        if (expanded) {
+            renderExpanded(root, track, c)
+        } else {
+            val label = when {
+                autoMusicPill -> "♫  ${track?.title.orEmpty()}"
+                c.isHoleSize -> ""
+                c.isCompact -> if (playing) "♫" else "●"
+                track != null -> "♫  ${track.title}"
+                else -> "●     Isla     ●"
+            }
+            root.addView(text(label, 11f, AndroidColor.WHITE).apply {
+                maxLines = 1
+                ellipsize = TextUtils.TruncateAt.END
+                gravity = Gravity.CENTER
+                setPadding(dp(3), 0, dp(3), 0)
+                layoutParams = LinearLayout.LayoutParams(
+                    LinearLayout.LayoutParams.MATCH_PARENT,
+                    LinearLayout.LayoutParams.MATCH_PARENT
+                )
+            })
+        }
+
+        val params = root.layoutParams as? WindowManager.LayoutParams ?: return
+        if (params.width != dp(width) || params.height != dp(height)) {
+            params.width = dp(width)
+            params.height = dp(height)
+            try {
+                wm.updateViewLayout(root, params)
+            } catch (_: IllegalArgumentException) {
+                // View detached while processing a session change.
+            }
+        }
+    }
+
+    private fun renderExpanded(root: LinearLayout, track: TrackInfo?, c: IslandConfig) {
+        val header = LinearLayout(this).apply {
+            orientation = LinearLayout.HORIZONTAL
+            gravity = Gravity.CENTER_VERTICAL
+        }
+
+        header.addView(text(track?.title ?: "Isla is active", 13f, AndroidColor.WHITE).apply {
+            typeface = Typeface.DEFAULT_BOLD
+            maxLines = 1
+            ellipsize = TextUtils.TruncateAt.END
+            layoutParams = LinearLayout.LayoutParams(0, dp(26), 1f)
+            gravity = Gravity.CENTER_VERTICAL
+        })
+        header.addView(text("×", 21f, AndroidColor.LTGRAY).apply {
+            gravity = Gravity.CENTER
+            contentDescription = "Close music controls"
+            setOnClickListener {
+                expanded = false
+                renderIsland()
+            }
+            layoutParams = LinearLayout.LayoutParams(dp(32), dp(30))
+        })
+        root.addView(
+            header,
+            LinearLayout.LayoutParams(
+                LinearLayout.LayoutParams.MATCH_PARENT,
+                LinearLayout.LayoutParams.WRAP_CONTENT
+            )
+        )
+
+        root.addView(text(
+            track?.artist?.ifBlank { track.packageName } ?: "Tap to minimize",
+            10f, AndroidColor.LTGRAY
+        ).apply {
+            maxLines = 1
+            ellipsize = TextUtils.TruncateAt.END
+            gravity = Gravity.CENTER_HORIZONTAL
+            layoutParams = LinearLayout.LayoutParams(
+                LinearLayout.LayoutParams.MATCH_PARENT, dp(18)
+            )
+        })
+
+        if (track == null) {
+            root.addView(text("Play a song to show its controls", 11f, c.accentHex.toInt()).apply {
+                gravity = Gravity.CENTER
+                layoutParams = LinearLayout.LayoutParams(
+                    LinearLayout.LayoutParams.MATCH_PARENT, dp(25)
+                )
+            })
+            return
+        }
+
+        val controls = LinearLayout(this).apply {
+            orientation = LinearLayout.HORIZONTAL
+            gravity = Gravity.CENTER
+        }
+        controls.addView(control("⏮", "Previous track", track.canPrevious, c.accentHex.toInt()) {
+            MusicState.previous()
+        })
+        controls.addView(control(
+            if (track.isPlaying) "Ⅱ" else "▶",
+            if (track.isPlaying) "Pause music" else "Play music",
+            true,
+            c.accentHex.toInt()
+        ) {
+            MusicState.playPause()
+        })
+        controls.addView(control("⏭", "Next track", track.canNext, c.accentHex.toInt()) {
+            MusicState.next()
+        })
+        root.addView(controls, LinearLayout.LayoutParams(
+            LinearLayout.LayoutParams.MATCH_PARENT, dp(50)
+        ))
+    }
+
+    private fun control(
+        label: String,
+        description: String,
+        enabled: Boolean,
+        accent: Int,
+        click: () -> Unit
+    ): TextView = text(label, 23f, if (enabled) accent else AndroidColor.DKGRAY).apply {
+        gravity = Gravity.CENTER
+        isEnabled = enabled
+        isClickable = enabled
+        contentDescription = description
+        layoutParams = LinearLayout.LayoutParams(0, dp(48), 1f)
+        if (enabled) setOnClickListener { click() }
+    }
+
+    private fun text(value: String, size: Float, color: Int) = TextView(this).apply {
+        text = value
+        textSize = size
+        setTextColor(color)
+        includeFontPadding = false
     }
 
     private fun removeIsland() {
+        MusicState.removeObserver(musicObserver)
         island?.let {
             try {
                 wm.removeView(it)
             } catch (_: IllegalArgumentException) {
-                // Already removed by WindowManager.
+                // Already removed.
             }
         }
         island = null
         expanded = false
     }
 
-    private fun dp(value: Int): Int = (value * resources.displayMetrics.density).toInt()
+    private fun dp(value: Int) = (value * resources.displayMetrics.density).toInt()
 
     override fun onDestroy() {
         removeIsland()
