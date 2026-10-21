@@ -1,56 +1,54 @@
 # Isla — Dynamic Island for Android
 
-A Kotlin + Jetpack Compose Android app with a customizable floating Dynamic Island overlay.
+**Isla** is a Kotlin + Jetpack Compose Android floating-island app with media playback, notifications, calls, charging, timers, navigation, downloads, system activities, gestures and visual customization.
 
-## Features
+The **`main` branch now opens the complete redesigned Isla Lab Android project** from the repository root. The former v1.2.1 app is preserved at [`archive/isla-v1.2.1`](https://github.com/urfavxbf/isla/tree/archive/isla-v1.2.1); it is no longer the root project's Android app.
 
-- Dark Material 3 settings UI with live preview
-- Overlay permission flow
-- Start/stop floating island
-- Adjustable width, height, corner radius, transparency and accent color
-- Preferences stored locally
-- Circular punch-hole preset (36dp) and width as small as 28dp
-- Screen-top position adjustment for different camera cutouts
-- **v1.2:** Opt-in media-session detection, track title/artist, Play/Pause and Skip controls
-- Tap the compact music indicator to expand below the status bar into a song card with playback controls
+## On-device build: Code on the Go
 
-## Build on an Android phone with Code on the Go
+There is no requirement to download a GitHub Actions APK if **Code on the Go can sync, build and install this project**.
 
-This project targets **Code on the Go 26.38+** with its bundled toolchain:
-**Gradle 9.6.1, Android Gradle Plugin 9.3.1, Kotlin 2.3.21**, and Android SDK 36.
+1. In Code on the Go, **pull the current `main` branch** (or re-clone if the existing working folder is stuck on an older project). GitHub merges do not sync your phone automatically.
+2. Open the **repository root** (the folder with `settings.gradle.kts`, `gradlew` and `README.md`), not the legacy `app` sources.
+3. Sync Gradle while online; use the Gradle **wrapper** when possible.
+4. Run **`:app:assembleDebug`** and use Code on the Go's **Run / Install** action to install the local build on your phone.
 
-1. Pull the latest `main` branch from GitHub or re-clone this repository inside Code on the Go. A pre-existing local copy does **not** update automatically when GitHub is changed.
-2. Open the root `Isla` project (the folder containing `settings.gradle.kts`).
-3. Save and choose **Sync** when Code on the Go prompts you.
-4. Run `:app:assembleDebug`.
+The root `settings.gradle.kts` maps `:app` to `isla-lab/app` and `:baselineprofile` to `isla-lab/baselineprofile`. This ensures the newest redesigned app is built, even when opened from the root.
 
-The root Gradle script includes the Kotlin classpath expected by CoGo's injected LogSender plugin, and uses AGP 9's built-in Kotlin support rather than the incompatible `org.jetbrains.kotlin.android` plugin.
+**Code on the Go compatibility warning:** this full-featured foundation uses **Gradle 9.7.1**, **Android Gradle Plugin 9.1.1**, **Kotlin 2.3.21**, Hilt and a newer Jetpack Compose stack. Some Code on the Go versions ship **Gradle 9.6.1**, older offline dependencies, or an incompatible Gradle init plugin. A successful GitHub build does **not** prove Code on the Go can compile it offline. Prefer Gradle wrapper and online dependency sync; if it fails, inspect the first actionable error from Gradle Output and adjust the toolchain rather than removing features.
 
-### If a dependency says `Could not find ...jar` in `localMvnRepository`
+## App installation identity
 
-CoGo usually builds offline using its bundled local Maven repository at
-`/data/data/com.itsaky.androidide/files/home/maven/localMvnRepository`.
-Its harvested offline repository supports only the toolchain/dependency versions it contains.
+- Current app: `Isla Lab` (Android package `com.pao.isla.lab`, version `0.1.0-lab`).
+- Former prototype: `Isla` (package `com.pao.isla`, version `1.2.1`).
 
-1. Verify you actually pulled the new Gradle files, especially **root `build.gradle.kts` version 9.3.1** and **`app/build.gradle.kts`**.
-2. In **Code on the Go → Preferences → Build & Run → Additional Gradle flags**, remove `--offline` if it is present. Connect to the internet, sync, and build again; Maven Central / Google Maven are already configured in this project.
-3. If the dependency still cannot be found and the log *only* searches the local Maven repository, the device's bundled Maven assets or Gradle initialization need attention. This cannot be fixed by changing UI Kotlin code or creating an empty jar.
+They are *separate* Android app installations; building this main branch does not silently replace or update an installed `com.pao.isla`. You may install both while validating the redesign. The displayed app name can be changed to `Isla` after migration testing, independent of the application ID.
 
-CoGo's [official toolchain migration guide](https://github.com/appdevforall/CodeOnTheGo/wiki/IMPORTANT:-Fix-project-breaking-changes-after-the-Gradle-AGP-Kotlin-toolchain-upgrade) provides the matching AGP/Kotlin settings and offline-flag location.
+## Screens and capabilities
 
-## Minimum device
+- **Home:** setup, status, island preview, start and stop.
+- **Overlay:** position presets, notch/camera cutout, landscape anchors and fine-tuning.
+- **Features:** toggles for media sessions, notifications, calls, power, timers, connections, navigation and other supported events, plus an in-app demo.
+- **Style:** colors, glass effects, typography, animations and individualized activity-card accents.
+- **System:** permission onboarding, security/privacy settings, search, backup/restore, diagnostics and About.
 
-Android 8.0 (API 26) or newer. The floating island requires Android's
-**Display over other apps** permission.
+Some activity integrations depend on source apps, Android permissions and device firmware; code availability is not a guarantee of phone compatibility. Grant only the permissions needed for features you choose.
 
-## Music controls (v1.2)
+## Build from CLI
 
-1. Open Isla and tap **Enable music access** in the **Now playing** section.
-2. On Android's notification access page, turn on **Isla music controls** and confirm.
-3. Return to Isla, press **Start**, then play a song in an app that publishes a standard Android media session.
-4. The island shows the current track. Tap it to expand the controls, or tap **×** to minimize.
-5. The collapsed music indicator stays small even with playback active. Expand only by tapping it, and use **×** to collapse. **Show music on island** can be turned off in Settings.
+```bash
+./gradlew :app:assembleDebug :app:testDebugUnitTest
+```
 
-**Privacy:** Android's notification-listener permission is broader than media playback. Isla's listener only reads active media sessions. It ignores other notifications and never stores or uploads their content. The feature is disabled until the user explicitly grants access.
+Debug APK output: `isla-lab/app/build/outputs/apk/debug/app-debug.apk`.
 
-**Compatibility:** Apps must publish active media sessions with supported transport actions for their playback controls to work; device-specific battery restrictions and overlay behavior may affect operation. Calls and non-media notifications are not implemented yet.
+GitHub CI also builds and runs JVM unit tests at the repository root.
+
+## Project notes and provenance
+
+- [Isla UI architecture](docs/ISLA_UI_ARCHITECTURE.md)
+- [Overlay editor PR](https://github.com/urfavxbf/isla/pull/12)
+- [Activity card PR](https://github.com/urfavxbf/isla/pull/13)
+- [Complete derived source and attribution](isla-lab/README.md)
+
+This product is a **GNU GPL v3 derivative** of [Smart Island by Animesh Gupta and contributors](https://github.com/agupta07505/SmartIsland). Isla's branding and modifications do not remove the original authors' copyrights or required attribution. See [LICENSE](isla-lab/LICENSE), [ISLA_ATTRIBUTION.md](isla-lab/ISLA_ATTRIBUTION.md), and [UPSTREAM_PROVENANCE.md](isla-lab/UPSTREAM_PROVENANCE.md). Redistributors must follow GPL-3.0 corresponding-source and notice requirements.
