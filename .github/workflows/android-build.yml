@@ -30,4 +30,4 @@ jobs:
         if: success()
         with:
           name: isla-debug-apk
-          path: isla-lab/app/build/outputs/apk/debug/*.apk
+          path: app/build/outputs/apk/debug/*.apk
