@@ -236,6 +236,7 @@ fun MusicExpanded(
                         Modifier.graphicsLayer { alpha = foregroundAlpha().coerceIn(0f, 1f) }
                     } else Modifier
                 )
+                .islaActivityAccent(Color(settings.musicVisualizerColor))
                 .padding(start = 16.dp, top = 16.dp, end = 16.dp, bottom = bottomPadding)
         ) {
             Row(
