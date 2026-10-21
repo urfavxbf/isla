@@ -9,6 +9,7 @@ import androidx.activity.compose.setContent
 import androidx.activity.result.contract.ActivityResultContracts
 import androidx.compose.foundation.background
 import androidx.compose.foundation.clickable
+import androidx.compose.foundation.horizontalScroll
 import androidx.compose.foundation.layout.*
 import androidx.compose.foundation.rememberScrollState
 import androidx.compose.foundation.shape.CircleShape
@@ -21,6 +22,7 @@ import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.alpha
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.text.font.FontWeight
+import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 
@@ -60,7 +62,9 @@ private fun IslaScreen(version: Int, grant: () -> Unit, start: () -> Unit, stop:
     fun update(next: IslandConfig) {
         c = next
         next.save(context)
-        context.startService(Intent(context, IslandOverlayService::class.java).setAction(IslandOverlayService.ACTION_UPDATE))
+        if (Settings.canDrawOverlays(context)) {
+            context.startService(Intent(context, IslandOverlayService::class.java).setAction(IslandOverlayService.ACTION_UPDATE))
+        }
     }
 
     Surface(Modifier.fillMaxSize(), color = Bg) {
@@ -75,27 +79,51 @@ private fun IslaScreen(version: Int, grant: () -> Unit, start: () -> Unit, stop:
                     Text("Your phone. Your style.", color = Muted)
                 }
             }
+
             Card(colors = CardDefaults.cardColors(containerColor = Panel)) {
                 Column(Modifier.fillMaxWidth().padding(18.dp), horizontalAlignment = Alignment.CenterHorizontally) {
                     Text("LIVE PREVIEW", style = MaterialTheme.typography.labelMedium, color = Muted)
                     Spacer(Modifier.height(18.dp))
-                    Box(Modifier.fillMaxWidth().height(76.dp), contentAlignment = Alignment.TopCenter) {
-                        Row(Modifier.width(c.widthDp.dp).height(c.heightDp.dp).alpha(c.transparency)
-                            .background(Color.Black, RoundedCornerShape(c.radiusDp.dp)).padding(horizontal = 12.dp),
-                            verticalAlignment = Alignment.CenterVertically, horizontalArrangement = Arrangement.SpaceBetween) {
-                            Box(Modifier.size(8.dp).background(c.accent, CircleShape))
-                            Text("Isla", color = Color.White, fontSize = 11.sp)
-                            Box(Modifier.size(6.dp).background(Color(0xFF48D597), CircleShape))
+                    Box(Modifier.fillMaxWidth().height(78.dp), contentAlignment = Alignment.TopCenter) {
+                        Box(
+                            Modifier.width(c.widthDp.dp).height(c.heightDp.dp)
+                                .alpha(c.transparency)
+                                .background(Color.Black, RoundedCornerShape(c.radiusDp.dp)),
+                            contentAlignment = Alignment.Center
+                        ) {
+                            if (!c.isCompact) {
+                                Row(
+                                    Modifier.fillMaxWidth().padding(horizontal = 10.dp),
+                                    verticalAlignment = Alignment.CenterVertically,
+                                    horizontalArrangement = Arrangement.SpaceBetween
+                                ) {
+                                    Box(Modifier.size(7.dp).background(c.accent, CircleShape))
+                                    Text("Isla", color = Color.White, fontSize = 11.sp)
+                                    Box(Modifier.size(6.dp).background(Color(0xFF48D597), CircleShape))
+                                }
+                            } else if (!c.isHoleSize) {
+                                Text("●", color = c.accent, fontSize = 10.sp, textAlign = TextAlign.Center)
+                            }
                         }
                     }
                     Text("${c.widthDp} × ${c.heightDp} dp", color = Muted, style = MaterialTheme.typography.labelSmall)
                 }
             }
+
             Card(colors = CardDefaults.cardColors(containerColor = Panel)) {
                 Column(Modifier.padding(18.dp), verticalArrangement = Arrangement.spacedBy(12.dp)) {
+                    Text("Shape presets", style = MaterialTheme.typography.titleMedium, fontWeight = FontWeight.SemiBold)
+                    Row(Modifier.horizontalScroll(rememberScrollState()), horizontalArrangement = Arrangement.spacedBy(8.dp)) {
+                        AssistChip(onClick = { update(c.copy(widthDp = 36, heightDp = 36, radiusDp = 36)) }, label = { Text("●  Hole") })
+                        AssistChip(onClick = { update(c.copy(widthDp = 88, heightDp = 32, radiusDp = 28)) }, label = { Text("Compact") })
+                        AssistChip(onClick = { update(c.copy(widthDp = 190, heightDp = 36, radiusDp = 24)) }, label = { Text("Standard") })
+                        AssistChip(onClick = { update(c.copy(widthDp = 260, heightDp = 42, radiusDp = 30)) }, label = { Text("Wide") })
+                    }
+                    Text("Use Hole for circular front cameras, then fine-tune below.", color = Muted, style = MaterialTheme.typography.bodySmall)
+                    HorizontalDivider()
                     Text("Customize", style = MaterialTheme.typography.titleMedium, fontWeight = FontWeight.SemiBold)
-                    SliderRow("Width", "${c.widthDp} dp", c.widthDp.toFloat(), 140f, 300f) { update(c.copy(widthDp = it.toInt())) }
-                    SliderRow("Height", "${c.heightDp} dp", c.heightDp.toFloat(), 28f, 64f) { update(c.copy(heightDp = it.toInt())) }
+                    SliderRow("Width", "${c.widthDp} dp", c.widthDp.toFloat(), 28f, 300f) { update(c.copy(widthDp = it.toInt())) }
+                    SliderRow("Height", "${c.heightDp} dp", c.heightDp.toFloat(), 24f, 64f) { update(c.copy(heightDp = it.toInt())) }
                     SliderRow("Corner roundness", "${c.radiusDp} dp", c.radiusDp.toFloat(), 12f, 36f) { update(c.copy(radiusDp = it.toInt())) }
                     SliderRow("Transparency", "${(c.transparency * 100).toInt()}%", c.transparency, 0.45f, 1f) { update(c.copy(transparency = it)) }
                     Text("Accent color", style = MaterialTheme.typography.labelLarge)
@@ -108,6 +136,18 @@ private fun IslaScreen(version: Int, grant: () -> Unit, start: () -> Unit, stop:
                     }
                 }
             }
+
+            Card(colors = CardDefaults.cardColors(containerColor = Panel)) {
+                Column(Modifier.padding(18.dp), verticalArrangement = Arrangement.spacedBy(12.dp)) {
+                    Text("Camera cutout alignment", style = MaterialTheme.typography.titleMedium, fontWeight = FontWeight.SemiBold)
+                    Text("Move the island up or down to align it with the punch-hole. Default is 0 dp (screen top).", color = Muted, style = MaterialTheme.typography.bodySmall)
+                    val positionLabel = if (c.positionYDp == 0) "0 dp" else if (c.positionYDp < 0) "${-c.positionYDp} dp up" else "${c.positionYDp} dp down"
+                    SliderRow("Vertical position", positionLabel, c.positionYDp.toFloat(), -72f, 80f) { update(c.copy(positionYDp = it.toInt())) }
+                    OutlinedButton(onClick = { update(c.copy(positionYDp = 0)) }, modifier = Modifier.fillMaxWidth()) { Text("Reset vertical position") }
+                    Text("Android and phone manufacturers may draw the status bar over regular app overlays. Exact camera-hole coverage cannot be guaranteed on every device.", color = Muted, style = MaterialTheme.typography.bodySmall)
+                }
+            }
+
             Card(colors = CardDefaults.cardColors(containerColor = Panel)) {
                 Column(Modifier.padding(18.dp), verticalArrangement = Arrangement.spacedBy(12.dp)) {
                     Text("Floating island", style = MaterialTheme.typography.titleMedium, fontWeight = FontWeight.SemiBold)
