@@ -124,6 +124,7 @@ fun BatteryExpanded(
         modifier = Modifier
             .fillMaxWidth()
             .wrapContentHeight()
+            .islaActivityAccent(batteryColor)
             .padding(start = 18.dp, top = 20.dp, end = 18.dp, bottom = bottomPadding)
             .heightIn(min = 72.dp, max = 110.dp),
         horizontalArrangement = Arrangement.SpaceBetween,
