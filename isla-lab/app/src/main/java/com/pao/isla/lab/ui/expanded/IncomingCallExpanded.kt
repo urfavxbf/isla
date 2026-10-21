@@ -190,7 +190,7 @@ private fun CircleActionButton(
     Box(
         modifier = Modifier
             .size(46.dp)
-            .clip(CircleShape)
+            .clip(androidx.compose.foundation.shape.RoundedCornerShape(16.dp))
             .background(color)
             .bounceClick(onClick = onClick),
         contentAlignment = Alignment.Center
