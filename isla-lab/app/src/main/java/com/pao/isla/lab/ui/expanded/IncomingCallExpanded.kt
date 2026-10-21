@@ -95,6 +95,14 @@ fun IncomingCallExpanded(
         verticalAlignment = Alignment.CenterVertically
     ) {
         Column(modifier = Modifier.weight(1f)) {
+            IslaActivityEyebrow(
+                label = when {
+                    isRinging -> "Incoming call"
+                    notification?.isCallConnecting == true -> "Connecting"
+                    else -> "On call"
+                },
+                accent = Color(settings.callColor)
+            )
             Text(
                 text = notification?.title?.takeIf { it.isNotBlank() }
                     ?: notification?.text?.takeIf { it.isNotBlank() }
