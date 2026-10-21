@@ -271,6 +271,11 @@ fun MusicExpanded(
                 verticalAlignment = Alignment.CenterVertically
             ) {
                 Column(Modifier.weight(1f)) {
+                    IslaActivityEyebrow(
+                        label = if (localIsPlaying) "Now playing" else "Media paused",
+                        accent = Color(settings.musicVisualizerColor)
+                    )
+                    Spacer(Modifier.height(5.dp))
                     Text(
                         notification?.title?.takeIf { it.isNotBlank() } ?: "Song",
                         color = palette.text,
