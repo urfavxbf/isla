@@ -15,8 +15,7 @@ data class IslandConfig(
     val transparency: Float = 1f,
     val accentHex: Long = 0xFF8B5CF6,
     val positionYDp: Int = 0,
-    val showMedia: Boolean = true,
-    val expandOnPlay: Boolean = true
+    val showMedia: Boolean = true
 ) {
     val accent: Color get() = Color(accentHex.toInt())
     val isHoleSize: Boolean get() = widthDp < 56
@@ -31,7 +30,6 @@ data class IslandConfig(
             .putLong("accent", accentHex)
             .putInt("position_y", positionYDp)
             .putBoolean("show_media", showMedia)
-            .putBoolean("expand_on_play", expandOnPlay)
             .apply()
     }
 
@@ -45,8 +43,7 @@ data class IslandConfig(
                 transparency = p.getFloat("transparency", 1f).coerceIn(0.45f, 1f),
                 accentHex = p.getLong("accent", 0xFF8B5CF6),
                 positionYDp = p.getInt("position_y", 0).coerceIn(-72, 80),
-                showMedia = p.getBoolean("show_media", true),
-                expandOnPlay = p.getBoolean("expand_on_play", true)
+                showMedia = p.getBoolean("show_media", true)
             )
         }
     }
