@@ -145,6 +145,10 @@ fun BatteryExpanded(
             )
 
             Column {
+                IslaActivityEyebrow(
+                    label = "Power",
+                    accent = batteryColor
+                )
                 Text(
                     text = notification.title.takeIf { it.isNotBlank() } ?: when (visual) {
                         BatteryVisual.Saver -> "Battery Saver ON"
