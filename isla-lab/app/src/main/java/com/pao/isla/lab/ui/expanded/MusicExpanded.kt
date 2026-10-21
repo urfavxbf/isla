@@ -273,7 +273,7 @@ fun MusicExpanded(
             ) {
                 Column(Modifier.weight(1f)) {
                     IslaActivityEyebrow(
-                        label = if (localIsPlaying) "Now playing" else "Media paused",
+                        label = stringResource(if (localIsPlaying) R.string.isla_media_playing else R.string.isla_media_paused),
                         accent = Color(settings.musicVisualizerColor)
                     )
                     Spacer(Modifier.height(5.dp))
