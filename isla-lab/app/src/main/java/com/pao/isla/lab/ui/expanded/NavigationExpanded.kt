@@ -7,6 +7,10 @@
 
 package com.pao.isla.lab.ui.expanded
 
+import com.pao.isla.lab.R
+
+import androidx.compose.ui.res.stringResource
+
 import androidx.compose.foundation.Image
 import androidx.compose.foundation.background
 import androidx.compose.foundation.horizontalScroll
@@ -92,6 +96,7 @@ fun NavigationExpanded(
         modifier = Modifier
             .fillMaxWidth()
             .heightIn(min = NAVIGATION_EXPANDED_HEIGHT)
+            .islaActivityAccent(navColor)
             .clickable { onOpenNotification() }
             .padding(start = 18.dp, top = 20.dp, end = 18.dp, bottom = bottomPadding),
         verticalArrangement = Arrangement.SpaceBetween
@@ -133,6 +138,7 @@ fun NavigationExpanded(
             }
 
             Column(modifier = Modifier.weight(1f)) {
+                IslaActivityEyebrow(label = stringResource(R.string.isla_card_navigation), accent = navColor)
                 Text(
                     text = notification?.appName ?: "Google Maps",
                     color = LocalIslandPalette.current.text,

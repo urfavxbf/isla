@@ -6,6 +6,15 @@
   Do not remove or alter this notice. - Per GPL-3.0 Section 4 & Section 5
 -->
 <resources>
+    <!-- Isla activity card identity labels; untranslated locales fall back to these strings. -->
+    <string name="isla_media_playing">Now playing</string>
+    <string name="isla_media_paused">Media paused</string>
+    <string name="isla_call_incoming">Incoming call</string>
+    <string name="isla_call_connecting">Connecting</string>
+    <string name="isla_call_active">On call</string>
+    <string name="isla_card_notification">Notification</string>
+    <string name="isla_card_power">Power</string>
+    <string name="isla_card_navigation">Navigation</string>
     <!-- Isla's new five-destination control center; Android falls back to these for untranslated locales. -->
     <string name="isla_nav_home">Home</string>
     <string name="isla_nav_overlay">Overlay</string>

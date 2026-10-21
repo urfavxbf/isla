@@ -101,6 +101,7 @@ fun DownloadExpanded(
         modifier = Modifier
             .fillMaxWidth()
             .wrapContentHeight()
+            .islaActivityAccent(accentColor)
             .clickable {
                 if (notification.contentIntent != null) {
                     onOpenNotification()
@@ -164,6 +165,7 @@ fun DownloadExpanded(
             }
 
             Column(modifier = Modifier.weight(1f)) {
+                IslaActivityEyebrow(label = badgeLabel, accent = accentColor)
                 Text(
                     text = notification.title.ifBlank { kind.fallbackTitle },
                     color = LocalIslandPalette.current.text,

@@ -7,6 +7,10 @@
 
 package com.pao.isla.lab.ui.expanded
 
+import com.pao.isla.lab.R
+
+import androidx.compose.ui.res.stringResource
+
 import android.content.Context
 import androidx.compose.animation.core.Animatable
 import androidx.compose.animation.core.FastOutSlowInEasing
@@ -124,6 +128,7 @@ fun BatteryExpanded(
         modifier = Modifier
             .fillMaxWidth()
             .wrapContentHeight()
+            .islaActivityAccent(batteryColor)
             .padding(start = 18.dp, top = 20.dp, end = 18.dp, bottom = bottomPadding)
             .heightIn(min = 72.dp, max = 110.dp),
         horizontalArrangement = Arrangement.SpaceBetween,
@@ -145,6 +150,10 @@ fun BatteryExpanded(
             )
 
             Column {
+                IslaActivityEyebrow(
+                    label = stringResource(R.string.isla_card_power),
+                    accent = batteryColor
+                )
                 Text(
                     text = notification.title.takeIf { it.isNotBlank() } ?: when (visual) {
                         BatteryVisual.Saver -> "Battery Saver ON"

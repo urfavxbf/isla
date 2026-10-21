@@ -7,6 +7,10 @@
 
 package com.pao.isla.lab.ui.expanded
 
+import com.pao.isla.lab.R
+
+import androidx.compose.ui.res.stringResource
+
 import androidx.compose.foundation.background
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Box
@@ -90,11 +94,20 @@ fun IncomingCallExpanded(
             .fillMaxWidth()
             .wrapContentHeight()
             .heightIn(min = 64.dp, max = 110.dp)
+            .islaActivityAccent(Color(settings.callColor))
             .padding(start = 18.dp, top = 20.dp, end = 18.dp, bottom = bottomPadding),
         horizontalArrangement = Arrangement.spacedBy(10.dp),
         verticalAlignment = Alignment.CenterVertically
     ) {
         Column(modifier = Modifier.weight(1f)) {
+            IslaActivityEyebrow(
+                label = stringResource(when {
+                    isRinging -> R.string.isla_call_incoming
+                    notification?.isCallConnecting == true -> R.string.isla_call_connecting
+                    else -> R.string.isla_call_active
+                }),
+                accent = Color(settings.callColor)
+            )
             Text(
                 text = notification?.title?.takeIf { it.isNotBlank() }
                     ?: notification?.text?.takeIf { it.isNotBlank() }
@@ -181,7 +194,7 @@ private fun CircleActionButton(
     Box(
         modifier = Modifier
             .size(46.dp)
-            .clip(CircleShape)
+            .clip(androidx.compose.foundation.shape.RoundedCornerShape(16.dp))
             .background(color)
             .bounceClick(onClick = onClick),
         contentAlignment = Alignment.Center
