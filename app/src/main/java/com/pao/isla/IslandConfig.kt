@@ -10,7 +10,7 @@ data class IslandConfig(
     val transparency: Float = 1f,
     val accentHex: Long = 0xFF8B5CF6
 ) {
-    val accent: Color get() = Color(accentHex)
+    val accent: Color get() = Color(accentHex.toInt())
     fun save(context: Context) {
         context.getSharedPreferences("isla_config", Context.MODE_PRIVATE).edit()
             .putInt("width", widthDp).putInt("height", heightDp).putInt("radius", radiusDp)
